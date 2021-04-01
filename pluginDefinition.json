@@ -1,0 +1,40 @@
+{
+  "identifier": "org.zowe.explorer-ip",
+  "apiVersion": "1.0.0",
+  "pluginVersion": "1.0.0",
+  "pluginType": "application",
+  "webContent": {
+    "framework": "react",
+    "launchDefinition": {
+      "pluginShortNameKey": "IP Explorer",
+      "pluginShortNameDefault": "IP Explorer",
+      "imageSrc": "assets/icon.png"
+    },
+    "descriptionKey": "ipexplorerdescription",
+    "descriptionDefault": "Plugin for IP Explorer utility",
+    "isSingleWindowApp": true,
+    "defaultWindowStyle": {
+      "width": 1000,
+      "height": 650
+    }
+  },
+  "dataServices": [
+    {
+      "type": "service",
+      "name": "ipExplorer",
+      "version": "1.0.0",
+      "initializerLookupMethod": "external",
+      "initializerName": "ipExplorerDataServiceInstaller",
+      "libraryName": "ipExplorer.so",
+      "methods": ["GET"],
+      "dependenciesIncluded": true
+    }
+  ],
+  "configurationData": {
+    "resources": {
+      "prefs": {
+        "aggregationPolicy": "none"
+      }
+    }
+  }
+}
