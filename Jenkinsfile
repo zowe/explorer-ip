@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2020
+ * Copyright IBM Corporation 2021
  */
 
 def WEB_CLIENT = 'webClient'

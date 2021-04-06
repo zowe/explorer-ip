@@ -7,7 +7,7 @@
 #
 # SPDX-License-Identifier: EPL-2.0
 #
-# Copyright IBM Corporation 2018, 2020
+# Copyright IBM Corporation 2021
 ################################################################################
 
 ################################################################################
@@ -102,7 +102,7 @@ rm -f "explorer-ip.tar.gz"
 cp -r "ascii" "explorer-ip"
 
 # tar explorer-ip
-tar -zcvf "explorer-ip.tar.gz" "explorer-ip"
-echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} *.tar.gz is generated"
+tar -cvf "explorer-ip.tar" "explorer-ip"
+echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} *.tar is generated"
 
 exit 0
