@@ -1,0 +1,15 @@
+name: explorer-ip
+id: org.zowe.explorer-ip
+title: IP Explorer
+description: The Zowe Desktop application to monitor TCP/IP stack using the EZBNMIFR network management interface
+license: EPL-2.0
+repository:
+  type: git
+  url: https://github.com/zowe/explorer-ip.git
+build:
+  branch: "{{build.branch}}"
+  number: "{{build.number}}"
+  commitHash: "{{build.commitHash}}"
+  timestamp: "{{build.timestamp}}"
+appfwPlugins:
+  - path: .

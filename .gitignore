@@ -20,6 +20,24 @@ dataService/build/zss
 .DS_Store
 *.tar
 
+node_modules/
+lib
+.nyc_output/
+coverage/
+web
+dist
+
+#pax ignore
+.pax/*
+!.pax/.keep
+!.pax/pre-packaging.sh
+!.pax/post-packaging.sh
+!.pax/prepare-workspace.sh
+!.pax/catchall-packaging.sh
+
+# jenkin ignore
+**/*@tmp/
+
 # This program and the accompanying materials are
 # made available under the terms of the Eclipse Public License v2.0 which accompanies
 # this distribution, and is available at https://www.eclipse.org/legal/epl-v20.html
