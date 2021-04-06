@@ -90,4 +90,19 @@ rsync -rv \
   "${PAX_WORKSPACE_DIR}/ascii"
 
 echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} folder is prepared."
+
+# prepare tar file as well
+echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} prepare *.tar.gz"
+cd "${PAX_WORKSPACE_DIR}"
+# remove folder for local build & tar
+rm -fr "explorer-ip"
+rm -f "explorer-ip.tar.gz"
+
+# copy ascii to explorer-ip
+cp -r "ascii" "explorer-ip"
+
+# tar explorer-ip
+tar -zcvf "explorer-ip.tar.gz" "explorer-ip"
+echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} *.tar.gz is generated"
+
 exit 0
