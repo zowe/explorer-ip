@@ -43,13 +43,23 @@ cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
 cp  README.md "${PAX_WORKSPACE_DIR}/content"
 cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 
-# copy web explorer-ip to target folder
+# setup zlux repo to build web plugin
+cd "${ROOT_DIR}"
+git clone --recursive git@github.com:zowe/zlux.git
+cd zlux
+git submodule foreach "git checkout master"
+cd zlux-app-manager/virtual-desktop && npm install
+export MVD_DESKTOP_DIR="${ROOT_DIR}/zlux/zlux-app-manager/virtual-desktop/"
+
 # build steps 
-# cd webClient && npm install --prod && npm run build
+cd "${ROOT_DIR}/webClient"
+cd webClient && npm install --prod && npm run build
+
+cd "${ROOT_DIR}"
+# copy web explorer-ip to target folder
 echo "[${SCRIPT_NAME}] copying explorer-ip web"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/web"
 cp -r web "${PAX_WORKSPACE_DIR}/content"
-
 
 # copy webClient source explorer-ip to target folder
 echo "[${SCRIPT_NAME}] copying webClient source to explorer-ip"
