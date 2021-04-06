@@ -13,3 +13,5 @@ build:
   timestamp: "{{build.timestamp}}"
 appfwPlugins:
   - path: .
+commands:
+  install: bin/install.sh

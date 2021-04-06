@@ -34,16 +34,22 @@ echo "[${SCRIPT_NAME}] cleaning PAX workspace ..."
 rm -fr "${PAX_WORKSPACE_DIR}/content"
 mkdir -p "${PAX_WORKSPACE_DIR}/content"
 
+# prepare content folder
+echo "[${SCRIPT_NAME}] copying explorer-ip root files"
+mkdir -p "${PAX_WORKSPACE_DIR}/content/bin"
+cp -r bin "${PAX_WORKSPACE_DIR}/content"
+cp  pluginDefinition.json "${PAX_WORKSPACE_DIR}/content"
+cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
+cp  README.md "${PAX_WORKSPACE_DIR}/content"
+cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
+
 # copy web explorer-ip to target folder
 # build steps 
 # cd webClient && npm install --prod && npm run build
 echo "[${SCRIPT_NAME}] copying explorer-ip web"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/web"
 cp -r web "${PAX_WORKSPACE_DIR}/content"
-cp  pluginDefinition.json "${PAX_WORKSPACE_DIR}/content"
-cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
-cp  README.md "${PAX_WORKSPACE_DIR}/content"
-cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
+
 
 # copy webClient source explorer-ip to target folder
 echo "[${SCRIPT_NAME}] copying webClient source to explorer-ip"
