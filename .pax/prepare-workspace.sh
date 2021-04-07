@@ -30,12 +30,12 @@ ZOWE_PLUGIN_ID="org.zowe.${PACKAGE_NAME}"
 cd "${EXPLIP_ROOT_DIR}"
 
 # prepare pax workspace
-echo "[${SCRIPT_NAME}] cleaning PAX workspace ..."
+echo "[${SCRIPT_NAME}] pre-clean and recreate PAX workspace ..."
 rm -fr "${PAX_WORKSPACE_DIR}/content"
 mkdir -p "${PAX_WORKSPACE_DIR}/content"
 
 # prepare content folder
-echo "[${SCRIPT_NAME}] copying explorer-ip root files"
+echo "[${SCRIPT_NAME}] copying explorer-ip root files to PAX workspace"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/bin"
 cp -r bin "${PAX_WORKSPACE_DIR}/content"
 cp  pluginDefinition.json "${PAX_WORKSPACE_DIR}/content"
@@ -43,7 +43,11 @@ cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
 cp  README.md "${PAX_WORKSPACE_DIR}/content"
 cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 
-# setup zlux repo to build web plugin
+############################
+# Step A. Building webClient
+############################
+
+# setup zlux repo, then build virtual desktop
 echo "[${SCRIPT_NAME}] setting up zLux plugins"
 cd "${EXPLIP_ROOT_DIR}"
 rm -rf zlux
@@ -54,36 +58,48 @@ git clone https://github.com/zowe/zlux-platform.git
 git submodule foreach "git checkout master"
 cd zlux-app-manager/virtual-desktop && npm ci
 
-# build steps 
+# build webClient
 echo "[${SCRIPT_NAME}] building webClient"
 # create a softlink of explorer-ip inside zlux
-cd ../..    # should be in zlux
+cd ../..    # now should be in zlux
 ln -s ${EXPLIP_ROOT_DIR} explorer-ip
 cd "explorer-ip/webClient"
-echo "Current path is" $(pwd)
 npm install
 export MVD_DESKTOP_DIR="${EXPLIP_ROOT_DIR}/zlux/zlux-app-manager/virtual-desktop/"
-mv tsConfig.json tsConfig.backup.json
-mv tsConfig.pipeline.json tsConfig.json
-npm run build #FIXME
+mv tsconfig.json tsconfig.backup.json
+mv tsconfig.pipeline.json tsconfig.json
+npm run build
+echo "[${SCRIPT_NAME}] Successfully built webClient"
 
-cd "${EXPLIP_ROOT_DIR}"
-# copy web explorer-ip to target folder
-echo "[${SCRIPT_NAME}] copying explorer-ip web"
+# clean up the symlink to reduce confusion
+cd ../.. #now back at zlux
+rm explorer-ip
+cd ${EXPLIP_ROOT_DIR} #reset current directory back to explorer-ip root
+
+# copy web to PAX workspace
+echo "[${SCRIPT_NAME}] copying web dir to PAX workspace"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/web"
 cp -r web "${PAX_WORKSPACE_DIR}/content"
 
-# copy webClient source explorer-ip to target folder
-echo "[${SCRIPT_NAME}] copying webClient source to explorer-ip"
+# copy webClient source to PAX workspace
+echo "[${SCRIPT_NAME}] copying webClient source to PAX workspace"
 ## remove node_modules to provide source only
 rm -rf webClient/node_modules
 mkdir -p "${PAX_WORKSPACE_DIR}/content/webClient"
-mv webClient/tsConfig.backup.json tsConfig.json
+mv webClient/tsconfig.backup.json webClient/tsconfig.json
 cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 
+
+##############################
+# Step B. Building dataService
+##############################
+
 # copy lib explorer-ip to target folder
-# build steps on z/OS
-# cd dataService/build && git clone https://github.com/zowe/zss/ && ./build.sh
+echo "[${SCRIPT_NAME}] clone zss then build dataService"
+cd dataService/build && git clone https://github.com/zowe/zss/ 
+# ./build.sh ---- this step is run on zOS
+
+echo "[${SCRIPT_NAME}] copy lib to PAX workspace"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/lib"
 cp -r lib "${PAX_WORKSPACE_DIR}/content"
 
