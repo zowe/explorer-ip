@@ -46,6 +46,7 @@ cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 # setup zlux repo to build web plugin
 echo "[${SCRIPT_NAME}] setting up zLux plugins"
 cd "${EXPLIP_ROOT_DIR}"
+rm -rf zlux
 mkdir zlux
 cd zlux
 git clone https://github.com/zowe/zlux-app-manager.git
