@@ -21,6 +21,7 @@
 #include <fnmatch.h>
 #include <ezbnmrhc.h>
 #include <ezbnmmpc.h>
+#include <__ftp.h>
 
 #include "httpserver.h"
 #include "dataservice.h"
@@ -968,12 +969,60 @@ int processAndRespondPorts(HttpResponse *response, CrossMemoryServerName *privil
   return 0;
 }
 
+void respondMethodNotAllowed(HttpResponse *response) {
+  jsonPrinter *p = respondWithJsonPrinter(response);
+
+    setResponseStatus(response, 405, "Method Not Allowed");
+    setDefaultJSONRESTHeaders(response);
+    addStringHeader(response, "Allow", "GET");
+    writeHeader(response);
+
+    jsonStart(p);
+    {
+      jsonAddString(p, "error", "Only GET requests are supported");
+    }
+    jsonEnd(p);
+    finishResponse(response);
+}
+
+int getTcpipName(HttpResponse *response) {
+  char *tcpip;
+  if (strcasecmp(response->request->method, methodGET) == 0) {
+    if ((tcpip = __iptcpn()) != NULL) {
+      jsonPrinter *p = respondWithJsonPrinter(response);
+      setResponseStatus(response, 200, "OK");
+      setDefaultJSONRESTHeaders(response);
+      writeHeader(response);
+      jsonStart(p);
+      jsonStartObject(p, "tcpip");
+
+      jsonAddString(p, "tcpipName", tcpip);
+
+      jsonEndObject(p);
+      jsonEnd(p);
+
+      finishResponse(response);
+    } else {
+      respondWithJsonError(response, "Unable to get TCPIP name.", 500, "Internal Server Error");
+    }
+  }
+  else {
+    respondMethodNotAllowed(response);
+  }
+}
+
 /* High-level function to serve HTTP requests */
 static int serveMappingService(HttpService *service, HttpResponse *response) {
   CrossMemoryServerName *privilegedServerName;
 
   HttpRequest *request = response->request;
-  char *tcpip = stringListPrint(request->parsedFile, service->parsedMaskPartCount, 1, "/", 0);        // extract TCPIP name from the HTTP request
+  // either extract TCPIP name from the HTTP request or extract "gettcpipname" keyword
+  char *tcpip = stringListPrint(request->parsedFile, service->parsedMaskPartCount, 1, "/", 0);
+  if (strcasecmp("gettcpipname", tcpip) == 0) {
+    getTcpipName(response);
+    return 0;
+  }
+
   char *requestType = stringListPrint(request->parsedFile, service->parsedMaskPartCount + 1, 1, "/", 0);  // extract NWM request type from the HTTP request
 
   zowelog(NULL, loggingId, ZOWE_LOG_DEBUG,
@@ -1015,19 +1064,7 @@ static int serveMappingService(HttpService *service, HttpResponse *response) {
     }
   }
   else {
-    jsonPrinter *p = respondWithJsonPrinter(response);
-
-    setResponseStatus(response, 405, "Method Not Allowed");
-    setDefaultJSONRESTHeaders(response);
-    addStringHeader(response, "Allow", "GET");
-    writeHeader(response);
-
-    jsonStart(p);
-    {
-      jsonAddString(p, "error", "Only GET requests are supported");
-    }
-    jsonEnd(p);
-    finishResponse(response);
+    respondMethodNotAllowed(response);
   }
   return 0;
 }
