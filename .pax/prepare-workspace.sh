@@ -43,9 +43,9 @@ cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
 cp  README.md "${PAX_WORKSPACE_DIR}/content"
 cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 
-############################
-# Step A. Building webClient
-############################
+#####################################
+# Step A. Building webClient and copy
+#####################################
 
 # setup zlux repo, then build virtual desktop
 echo "[${SCRIPT_NAME}] setting up zLux plugins"
@@ -90,28 +90,24 @@ mv webClient/tsconfig.backup.json webClient/tsconfig.json
 cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 
 
-##############################
-# Step B. Building dataService
-##############################
+#################################
+# Step B. copy dataService source
+#################################
 
-# copy lib to target folder
-echo "[${SCRIPT_NAME}] clone zss then build dataService"
+# clone zss and copy to dataService (zss cannot be built on Unix)
+echo "[${SCRIPT_NAME}] clone zss and copy to dataService"
 git clone https://github.com/zowe/zss/
-# FIXME: build zss on zOS, cannot produce lib on unix 
-echo "[${SCRIPT_NAME}] copy lib to PAX workspace" 
-mkdir -p "${PAX_WORKSPACE_DIR}/content/lib"
-cp -r lib "${PAX_WORKSPACE_DIR}/content"
+cp -r zss dataService
 
 # copy dataService source to PAX workspace
 echo "[${SCRIPT_NAME}] copying dataService source to PAX workspace"
-## remove node_modules to provide source only
 mkdir -p "${PAX_WORKSPACE_DIR}/content/dataService"
 cp -r dataService "${PAX_WORKSPACE_DIR}/content"
 
 
-#################################################
-# Step C. Remaining steps in preparing PAX folder
-#################################################
+############################################
+# Step C. copy PAX workspace to ascii folder
+############################################
 
 # move content to another folder
 rm -fr "${PAX_WORKSPACE_DIR}/ascii"
