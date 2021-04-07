@@ -94,20 +94,24 @@ cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 # Step B. Building dataService
 ##############################
 
-# copy lib explorer-ip to target folder
+# copy lib to target folder
 echo "[${SCRIPT_NAME}] clone zss then build dataService"
-cd dataService/build && git clone https://github.com/zowe/zss/ 
-# ./build.sh ---- this step is run on zOS
-
-echo "[${SCRIPT_NAME}] copy lib to PAX workspace"
+git clone https://github.com/zowe/zss/
+# FIXME: build zss on zOS, cannot produce lib on unix 
+echo "[${SCRIPT_NAME}] copy lib to PAX workspace" 
 mkdir -p "${PAX_WORKSPACE_DIR}/content/lib"
 cp -r lib "${PAX_WORKSPACE_DIR}/content"
 
-# copy dataService source explorer-ip to target folder
-echo "[${SCRIPT_NAME}] copying dataService source to explorer-ip"
+# copy dataService source to PAX workspace
+echo "[${SCRIPT_NAME}] copying dataService source to PAX workspace"
 ## remove node_modules to provide source only
 mkdir -p "${PAX_WORKSPACE_DIR}/content/dataService"
 cp -r dataService "${PAX_WORKSPACE_DIR}/content"
+
+
+#################################################
+# Step C. Remaining steps in preparing PAX folder
+#################################################
 
 # move content to another folder
 rm -fr "${PAX_WORKSPACE_DIR}/ascii"
@@ -135,6 +139,11 @@ rsync -rv \
   "${PAX_WORKSPACE_DIR}/ascii"
 
 echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} folder is prepared."
+
+
+######################
+# Step D. Creating tar
+######################
 
 # prepare tar file as well
 echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} prepare *.tar.gz"

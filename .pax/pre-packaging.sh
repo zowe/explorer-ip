@@ -17,5 +17,5 @@ chtag -Rtc ISO8859-1 web
 
 # npm install on z/OS to build zss plugin
 cd ./content/dataService/build
-git clone https://github.com/zowe/zss/ 
+#git clone https://github.com/zowe/zss/ 
 ./build.sh
