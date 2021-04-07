@@ -15,6 +15,6 @@ set -x
 cd ./content/
 chtag -Rtc ISO8859-1 web
 
-# npm install on z/OS to build zss plugin
+# build dataService
 cd ./content/dataService/build
 ./build.sh
