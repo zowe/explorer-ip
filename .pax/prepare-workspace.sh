@@ -19,15 +19,15 @@
 # contants
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-ROOT_DIR=$(cd "$SCRIPT_DIR" && cd .. && pwd)
+EXPLIP_ROOT_DIR=$(cd "$SCRIPT_DIR" && cd .. && pwd)
 PAX_WORKSPACE_DIR=.pax
-cd "${ROOT_DIR}/webClient"
+cd "${EXPLIP_ROOT_DIR}/webClient"
 PACKAGE_NAME=$(node -e "console.log(require('./package.json').name)")
 PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version)")
 PACKAGE_DESC=$(node -e "console.log(require('./package.json').description)")
 ZOWE_PLUGIN_ID="org.zowe.${PACKAGE_NAME}"
 
-cd "${ROOT_DIR}"
+cd "${EXPLIP_ROOT_DIR}"
 
 # prepare pax workspace
 echo "[${SCRIPT_NAME}] cleaning PAX workspace ..."
@@ -44,18 +44,27 @@ cp  README.md "${PAX_WORKSPACE_DIR}/content"
 cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 
 # setup zlux repo to build web plugin
-cd "${ROOT_DIR}"
-git clone --recursive git@github.com:zowe/zlux.git
+echo "[${SCRIPT_NAME}] setting up zLux plugins"
+cd "${EXPLIP_ROOT_DIR}"
+mkdir zlux
 cd zlux
+git clone https://github.com/zowe/zlux-app-manager.git
+git clone https://github.com/zowe/zlux-platform.git
 git submodule foreach "git checkout master"
-cd zlux-app-manager/virtual-desktop && npm install
-export MVD_DESKTOP_DIR="${ROOT_DIR}/zlux/zlux-app-manager/virtual-desktop/"
+cd zlux-app-manager/virtual-desktop && npm ci
 
 # build steps 
-cd "${ROOT_DIR}/webClient"
-cd webClient && npm install --prod && npm run build
+echo "[${SCRIPT_NAME}] building webClient"
+# create a softlink of explorer-ip inside zlux
+cd ../..    # should be in zlux
+ln -s ${EXPLIP_ROOT_DIR} explorer-ip
+cd "explorer-ip/webClient"
+echo "Current path is" $(pwd)
+npm install
+export MVD_DESKTOP_DIR="${EXPLIP_ROOT_DIR}/zlux/zlux-app-manager/virtual-desktop/"
+npm run build #FIXME
 
-cd "${ROOT_DIR}"
+cd "${EXPLIP_ROOT_DIR}"
 # copy web explorer-ip to target folder
 echo "[${SCRIPT_NAME}] copying explorer-ip web"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/web"
