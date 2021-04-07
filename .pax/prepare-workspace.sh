@@ -136,7 +136,7 @@ rsync -rv \
 
 echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} folder is prepared."
 
-
+# TODO tar should be done after dataService is built on zOS
 ######################
 # Step D. Creating tar
 ######################
