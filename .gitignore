@@ -26,6 +26,7 @@ lib
 coverage/
 web
 dist
+zlux
 
 #pax ignore
 .pax/*

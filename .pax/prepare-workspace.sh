@@ -62,6 +62,8 @@ cd "explorer-ip/webClient"
 echo "Current path is" $(pwd)
 npm install
 export MVD_DESKTOP_DIR="${EXPLIP_ROOT_DIR}/zlux/zlux-app-manager/virtual-desktop/"
+mv tsConfig.json tsConfig.backup.json
+mv tsConfig.pipeline.json tsConfig.json
 npm run build #FIXME
 
 cd "${EXPLIP_ROOT_DIR}"
@@ -75,6 +77,7 @@ echo "[${SCRIPT_NAME}] copying webClient source to explorer-ip"
 ## remove node_modules to provide source only
 rm -rf webClient/node_modules
 mkdir -p "${PAX_WORKSPACE_DIR}/content/webClient"
+mv webClient/tsConfig.backup.json tsConfig.json
 cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 
 # copy lib explorer-ip to target folder
