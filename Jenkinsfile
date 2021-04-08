@@ -38,7 +38,7 @@ node('zowe-jenkins-agent-dind') {
     disableLint: true,
   )
 
-  pipeline.build()
+  //pipeline.build()
 
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
