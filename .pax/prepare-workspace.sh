@@ -16,7 +16,7 @@
 # - build client
 #################################################################################
 
-# contants
+# constants
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 EXPLIP_ROOT_DIR=$(cd "$SCRIPT_DIR" && cd .. && pwd)
@@ -135,24 +135,6 @@ rsync -rv \
   "${PAX_WORKSPACE_DIR}/ascii"
 
 echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} folder is prepared."
-
-# TODO tar should be done after dataService is built on zOS
-######################
-# Step D. Creating tar
-######################
-
-# prepare tar file as well
-echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} prepare *.tar.gz"
-cd "${PAX_WORKSPACE_DIR}"
-# remove folder for local build & tar
-rm -fr "explorer-ip"
-rm -f "explorer-ip.tar.gz"
-
-# copy ascii to explorer-ip
-cp -r "ascii" "explorer-ip"
-
-# tar explorer-ip
-tar -cvf "explorer-ip.tar" "explorer-ip"
-echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} *.tar is generated"
+rm -r "${PAX_WORKSPACE_DIR}/content" #clean up
 
 exit 0

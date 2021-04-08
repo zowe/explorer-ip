@@ -11,10 +11,29 @@ set -x
 # Copyright IBM Corporation 2021
 ################################################################################
 
-#ascii tagging of web folder if not already
+# constants
+SCRIPT_NAME=$(basename "$0")
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+#content tagging of web folder if not already
+echo "[${SCRIPT_NAME}] tagging web folder as content"
 cd ./content/
 chtag -Rtc ISO8859-1 web
 
 # build dataService
-cd ./content/dataService/build
+echo "[${SCRIPT_NAME}] building dataService"
+cd dataService/build
 ./build.sh
+echo "[${SCRIPT_NAME}] successfully built dataService"
+
+# create tar
+echo "[${SCRIPT_NAME}] creating tar"
+cd "$SCRIPT_DIR"
+cp -r "content" "explorer-ip"
+# tar explorer-ip
+tar -cvf "explorer-ip.tar" "explorer-ip"
+echo "[${SCRIPT_NAME}] explorer-ip.tar is generated"
+rm -r explorer-ip
+mv explorer-ip.tar ../explorer-ip.tar
+
+# TODO need to send tar back to unix

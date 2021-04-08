@@ -51,7 +51,7 @@ node('zowe-jenkins-agent-dind') {
     baseDirectory:'.',
     artifacts: [
       '.pax/explorer-ip.pax'
-      '.pax/explorer-ip.tar.gz'
+      '.pax/explorer-ip.tar'
     ],
     allowPublishWithoutTest: true // There are no tests
   )
