@@ -38,7 +38,11 @@ node('zowe-jenkins-agent-dind') {
     disableLint: true,
   )
 
-  //pipeline.build()
+  pipeline.build(
+    operation: {
+      echo "Default npm build will be skipped."
+    }
+  )
 
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
