@@ -135,6 +135,5 @@ rsync -rv \
   "${PAX_WORKSPACE_DIR}/ascii"
 
 echo "[${SCRIPT_NAME}] ${PAX_WORKSPACE_DIR} folder is prepared."
-rm -r "${PAX_WORKSPACE_DIR}/content" #clean up
 
 exit 0

@@ -29,11 +29,6 @@ echo "[${SCRIPT_NAME}] successfully built dataService"
 # create tar
 echo "[${SCRIPT_NAME}] creating tar"
 cd "$SCRIPT_DIR"
-cp -r "content" "explorer-ip"
 # tar explorer-ip
-tar -cvf "explorer-ip.tar" "explorer-ip"
+tar -cvf "explorer-ip.tar" "content"
 echo "[${SCRIPT_NAME}] explorer-ip.tar is generated"
-rm -r explorer-ip
-mv explorer-ip.tar ../explorer-ip.tar
-
-# TODO need to send tar back to unix
