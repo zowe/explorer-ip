@@ -97,7 +97,7 @@ cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 # clone zss and copy to dataService (zss cannot be built on Unix)
 echo "[${SCRIPT_NAME}] clone zss and copy to dataService"
 git clone https://github.com/zowe/zss/
-cp -r zss dataService
+cp -r zss dataService/build
 
 # copy dataService source to PAX workspace
 echo "[${SCRIPT_NAME}] copying dataService source to PAX workspace"
