@@ -96,7 +96,7 @@ cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 
 # clone zss and copy to dataService (zss cannot be built on Unix)
 echo "[${SCRIPT_NAME}] clone zss and copy to dataService"
-git clone --recursive https://github.com/zowe/zss/
+git clone --recursive https://github.com/zowe/zss/   # this line also downloads zowe-common-c
 cp -r zss dataService/build
 
 # copy dataService source to PAX workspace
@@ -104,10 +104,14 @@ echo "[${SCRIPT_NAME}] copying dataService source to PAX workspace"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/dataService"
 cp -r dataService "${PAX_WORKSPACE_DIR}/content"
 
+#make sure .git folder is not inside .pax
+rm -rf "${PAX_WORKSPACE_DIR}/.git"
+rm -rf "${PAX_WORKSPACE_DIR}/content/.git"
 
-############################################
-# Step C. copy PAX workspace to ascii folder
-############################################
+
+#######################################################
+# Step C. create ascii folder for dealing with encoding 
+#######################################################
 
 # move content to another folder
 rm -fr "${PAX_WORKSPACE_DIR}/ascii"
