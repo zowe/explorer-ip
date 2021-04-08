@@ -20,14 +20,6 @@ echo "[${SCRIPT_NAME}] tagging web folder as content"
 cd ./content/
 chtag -Rtc ISO8859-1 web
 
-
-#debug
-echo "######################################"
-ls ./content/dataService
-echo
-ls ./content/dataService/build
-echo "######################################"
-
 # build dataService
 echo "[${SCRIPT_NAME}] building dataService"
 cd dataService/build
