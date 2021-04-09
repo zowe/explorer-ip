@@ -19,6 +19,7 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 echo "[${SCRIPT_NAME}] tagging web folder as content"
 cd ./content/
 chtag -Rtc ISO8859-1 web
+chtag -b web/assets/icon.png
 
 # build dataService
 echo "[${SCRIPT_NAME}] building dataService"

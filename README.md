@@ -78,6 +78,15 @@ Run `<your-zowe-instance>/bin/install-app.sh <path-to-plugin>`.
 
 Where `<path-to-plugin>` is directory with `web/`, `lib/` and `pluginDefinition.json` files
 
+## Installing using pax
+Its recommended to install all your extensions in same folder. 
+If you have defined `ZWE_EXTENSION_DIR` in `instance.env`, specifying target directory via `-d` option is optional
+```
+cd $RUNTIME_DIR/bin
+zowe-install-component.sh -i $INSTANCE_DIR -o /path/to/explorer-ip.pax -d /var/zowe/extensions
+```
+More info, about [installing extension here](https://docs.zowe.org/stable/extend/install-configure-zos-extensions.html#install-with-zowe-install-component-sh-technical-preview)
+
 ## Troubleshooting
 To turn on logging, add the following snippet into your zluxserver.json file:
 

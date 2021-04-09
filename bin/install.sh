@@ -1,2 +1,1 @@
-cd lib
-extattr +p ipExplorer.so
+cd lib && extattr +p ipExplorer.so
