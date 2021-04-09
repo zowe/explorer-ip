@@ -85,6 +85,9 @@ If you have defined `ZWE_EXTENSION_DIR` in `instance.env`, specifying target dir
 cd $RUNTIME_DIR/bin
 zowe-install-component.sh -i $INSTANCE_DIR -o /path/to/explorer-ip.pax -d /var/zowe/extensions
 ```
+
+You will need to **restart zowe** for `ipExplorer.so` dataservice dll to load alongwith `zssServer` on startup.
+
 More info, about [installing extension here](https://docs.zowe.org/stable/extend/install-configure-zos-extensions.html#install-with-zowe-install-component-sh-technical-preview)
 
 ## Troubleshooting
