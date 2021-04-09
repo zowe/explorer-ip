@@ -59,6 +59,9 @@ node('zowe-jenkins-agent-dind') {
     ],
     allowPublishWithoutTest: true // There are no tests
   )
-  
+
+  // define we need release stage
+  pipeline.release()
+
   pipeline.end()
 }
