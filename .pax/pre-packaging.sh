@@ -33,8 +33,5 @@ rm -rf zss
 # create tar
 echo "[${SCRIPT_NAME}] creating tar"
 cd "$SCRIPT_DIR"
-rm -rf explorer-ip # pre-clean
-cp -r content "explorer-ip"
-tar -cvf "explorer-ip.tar" "explorer-ip"
-rm -r "explorer-ip" # post-clean
+tar -cvf "explorer-ip.tar" -C content .
 echo "[${SCRIPT_NAME}] explorer-ip.tar is generated"
