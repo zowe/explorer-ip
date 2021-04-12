@@ -34,6 +34,6 @@ rm -rf zss
 echo "[${SCRIPT_NAME}] creating tar"
 cd "$SCRIPT_DIR"
 cd content
-tar -cvf "explorer-ip.tar" * && mv "explorer-ip.tar" "../explorer-ip.tar"
+tar -cvf ../explorer-ip.tar *
 cd ..
 echo "[${SCRIPT_NAME}] explorer-ip.tar is generated"
