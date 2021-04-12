@@ -15,9 +15,9 @@ interface IPExplorerApi {
 }
 
 class IPExplorerApi {
-    constructor(resources: ReactMVDResources){
+    constructor(resources: ReactMVDResources, tcpipJobName?: string){
         this.resources = resources;
-        this.tcpipJobName = "tcpip";
+        this.tcpipJobName = tcpipJobName || "TCPIP";
     }
 
     public getPreferences(): Promise<Response> {
@@ -33,6 +33,11 @@ class IPExplorerApi {
             ...message
           };
         return this.doPutRequest(destination, JSON.stringify(configWithMatadata));
+    }
+
+    public getDefaultTCPIPName(): Promise<Response> {
+        const destination = ZoweZLUX.uriBroker.pluginRESTUri(this.resources.pluginDefinition.getBasePlugin(), 'ipExplorer', 'gettcpipname');
+        return this.doGetRequest(destination);
     }
 
     public getInfo(): Promise<Response> {

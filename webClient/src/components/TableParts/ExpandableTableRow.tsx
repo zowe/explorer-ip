@@ -24,7 +24,6 @@ import { HeadCell } from '../../common/types';
 
 interface RowProps {
     row: any,
-    ipexplorerApi: ReturnType<typeof Object>,
     t: any
     headCells: HeadCell[],
     detailLabels: any[],

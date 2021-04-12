@@ -99,7 +99,7 @@ class OccupiedPortsTable extends React.Component<TableProps, OPTableState> {
     const { filter } = this.state;
     const order = this.state.order || this.props.preferredSorting.order || 'asc';
     const orderBy = this.state.orderBy || this.props.preferredSorting.orderBy || 'localPort';
-    const { t, started, ipv6, loading } = this.props;
+    const { t, loading } = this.props;
     const { ports, timestamp, error } = this.props.ports;
     const rowToLine = (row: Object) => {
       const rowKeys = headCells.map(c => (c.id).toString());
@@ -137,7 +137,6 @@ class OccupiedPortsTable extends React.Component<TableProps, OPTableState> {
                   .map(row => <ExpandableTableRow
                     key={rowToLine(row)}
                     row={row}
-                    ipexplorerApi={this.props.ipexplorerApi}
                     t={t}
                     headCells={headCells}
                     detailLabels={detailLabels}
@@ -150,14 +149,10 @@ class OccupiedPortsTable extends React.Component<TableProps, OPTableState> {
             </Table>
           </TableContainer>}
         { error
-          ? <div style={{...styles.alertContainer, position: 'absolute', top: styles.portsTableBody.height}}>
+          ? <div style={styles.alertContainer as React.CSSProperties}>
               <Alert severity="error">{`${t('error')}: ${error}`}</Alert>
             </div>
           : null}
-        <div style={styles.portsTableFooter}>
-          <span>{`${t('started')}: ${started.getTime() ? started.toLocaleString() : ''}. IPv6 ${ipv6 ? t('isEnabled') : t('isDisabled') }.`}</span>
-          <span>{`${t('total')}: ${ports.length}`}</span>
-        </div>
       </div>
     );
   }

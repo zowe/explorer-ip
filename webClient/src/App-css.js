@@ -17,6 +17,10 @@ const styles = {
     height: `calc(100% - ${tabsHeight}px)`
   },
 
+  tabsContainer: {
+    height: `calc(100% - ${footerHeight}px)`
+  },
+
   portsTableContainer: {
     height: "100%",
   },
@@ -31,21 +35,18 @@ const styles = {
     borderBottom: "1px solid #a9a9a9",
   },
 
-  flexCenter: {
-    display: "flex",
-    alignItems: "center",
-  },
-
   portsTableBody: {
-    height: `calc(100% - ${toolbarHeight + footerHeight + border}px)`,
+    height: `calc(100% - ${toolbarHeight + border}px)`,
   },
 
   portsTableFooter: {
+    alignItems: "center",
     color: "rgba(0, 0, 0, 0.54)",
     display: "flex",
     fontSize: "0.825rem",
+    height: `${footerHeight}px`,
     justifyContent: "space-between",
-    padding: "8px 16px",
+    padding: "0 16px",
   },
 
   detailsContainer: {
@@ -56,8 +57,28 @@ const styles = {
   },
 
   alertContainer: {
+    bottom: '45px',
     padding: '0 10px',
+    position: 'absolute', 
     width: '-webkit-fill-available',
+  },
+
+  layer: {
+    inset: "0px",
+    height: "100%",
+    position: "absolute",
+    width: "100%",
+  },
+
+  flexCenter: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center",
+  },
+
+  clickableText: {
+    cursor: "pointer",
+    textDecoration: "underline",
   }
 };
 

@@ -98,7 +98,9 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
     if (!ports.length || error) {
       this.props.getPorts();
     }
-    this.findActions();
+    if (!this.state.openJobActions) {
+      this.findActions();
+    }
   }
 
   componentWillUnmount() {
@@ -111,7 +113,7 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
     const { filter, tcp } = this.state;
     const order = this.state.order || this.props.preferredSorting.order || 'asc';
     const orderBy = this.state.orderBy || this.props.preferredSorting.orderBy || 'portNumber';
-    const { t, started, ipv6, loading } = this.props;
+    const { t, loading } = this.props;
     const { ports, timestamp, error } = this.props.ports;
     const rowToLine = (row: Object) => Object.keys(row).map(i => row[i]).join(' *** ').toLowerCase();
     const filteredPorts = ports
@@ -163,14 +165,10 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
             </Table>
           </TableContainer>}
         { error
-          ? <div style={{...styles.alertContainer, position: 'absolute', top: styles.portsTableBody.height}}>
+          ? <div style={styles.alertContainer as React.CSSProperties}>
               <Alert severity="error">{`${t('error')}: ${error}`}</Alert>
             </div>
           : null}
-        <div style={styles.portsTableFooter}>
-          <span>{`${t('started')}: ${started.getTime() ? started.toLocaleString() : ''}. IPv6 ${ipv6 ? t('isEnabled') : t('isDisabled') }.`}</span>
-          <span>{`${t('total')}: ${ports.length}`}</span>
-        </div>
       </div>
     );
   }
@@ -196,7 +194,7 @@ function JobCellWithMenu(props: {jobName: string | number, actions: ZLUX.Action[
 
   return (
     <div>
-      <div onClick={handleClick} style={{textDecoration: 'underline', cursor: 'pointer'}}>{jobName}</div> 
+      <div onClick={handleClick} style={styles.clickableText}>{jobName}</div> 
       <Menu
         id="job-menu"
         anchorEl={anchorEl}
