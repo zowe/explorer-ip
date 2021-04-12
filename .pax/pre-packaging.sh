@@ -33,7 +33,6 @@ rm -rf zss
 # create tar
 echo "[${SCRIPT_NAME}] creating tar"
 cd "$SCRIPT_DIR"
-#tar -cvf "explorer-ip.tar" -C content .
 cd content
 tar -cvf "explorer-ip.tar" * && mv "explorer-ip.tar" "../explorer-ip.tar"
 cd ..
