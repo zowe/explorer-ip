@@ -63,17 +63,7 @@ node('zowe-jenkins-agent-dind') {
     ],
     allowPublishWithoutTest: true // There are no tests
   )
-
-  // pipeline.createStage(
-  //   name          : "DEBUG",
-  //   isSkippable   : true,
-  //   stage         : {
-  //     pipeline.github.initFromFolder()
-  //     echo "Repository is"
-  //     println pipeline.github.repository
-  //   }
-  // )
-
+  
   // define we need release stage
   pipeline.release(
     baseDirectory:'.'
