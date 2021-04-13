@@ -64,6 +64,14 @@ node('zowe-jenkins-agent-dind') {
     allowPublishWithoutTest: true // There are no tests
   )
 
+  pipeline.createStage(
+    operation: {
+      echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
+      ls -al
+      git remote -v
+      echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
+    }
+  )
   // define we need release stage
   pipeline.release()
 
