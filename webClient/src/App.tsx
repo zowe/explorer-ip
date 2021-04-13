@@ -126,7 +126,7 @@ class App extends React.Component<any, AppState> {
         return response.tcpip.tcpipName;
     }).catch((error: Error) => {
       this.log.warn(`Could not fetch default TCPIP job name. ${error.message}`);
-      const tcpipName = "TCPIP"
+      const tcpipName = "*"
       this.setState({tcpipName});
       return tcpipName;
     });

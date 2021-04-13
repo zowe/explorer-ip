@@ -17,7 +17,7 @@ interface IPExplorerApi {
 class IPExplorerApi {
     constructor(resources: ReactMVDResources, tcpipJobName?: string){
         this.resources = resources;
-        this.tcpipJobName = tcpipJobName || "TCPIP";
+        this.tcpipJobName = tcpipJobName || "*";
     }
 
     public getPreferences(): Promise<Response> {
