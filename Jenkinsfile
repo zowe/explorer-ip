@@ -69,8 +69,8 @@ node('zowe-jenkins-agent-dind') {
     isSkippable   : true,
     stage         : {
       echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
-      ls -al
-      git remote -v
+      sh "ls -al"
+      sh "git remote -v"
       echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
     }
   )
