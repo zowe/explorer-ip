@@ -42,39 +42,40 @@ node('zowe-jenkins-agent-dind') {
     disableLint: true,
   )
 
-  // pipeline.build(
-  //   operation: {
-  //     echo "Default npm build will be skipped."
-  //   }
-  // )
-
-  // // we have pax packaging step
-  // pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
-
-  // // define we need publish stage
-  // pipeline.publish(
-  //   operation: {
-  //     echo "Default npm publish will be skipped."
-  //   },
-  //   baseDirectory:'.',
-  //   artifacts: [
-  //     '.pax/explorer-ip.pax',
-  //     '.pax/explorer-ip.tar'
-  //   ],
-  //   allowPublishWithoutTest: true // There are no tests
-  // )
-
-  pipeline.createStage(
-    name          : "DEBUG",
-    isSkippable   : true,
-    stage         : {
-      pipeline.github.initFromFolder()
-      echo "Repository is"
-      println pipeline.github.repository
+  pipeline.build(
+    operation: {
+      echo "Default npm build will be skipped."
     }
   )
+
+  // we have pax packaging step
+  pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
+
+  // define we need publish stage
+  pipeline.publish(
+    operation: {
+      echo "Default npm publish will be skipped."
+    },
+    baseDirectory:'.',
+    artifacts: [
+      '.pax/explorer-ip.pax',
+      '.pax/explorer-ip.tar'
+    ],
+    allowPublishWithoutTest: true // There are no tests
+  )
+
+  // pipeline.createStage(
+  //   name          : "DEBUG",
+  //   isSkippable   : true,
+  //   stage         : {
+  //     pipeline.github.initFromFolder()
+  //     echo "Repository is"
+  //     println pipeline.github.repository
+  //   }
+  // )
+  
   // define we need release stage
-  // pipeline.release()
+  pipeline.release(baseDirectory:'.')
 
   pipeline.end()
 }
