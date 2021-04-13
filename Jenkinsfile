@@ -75,7 +75,7 @@ node('zowe-jenkins-agent-dind') {
     }
   )
   // define we need release stage
-  pipeline.release()
+  // pipeline.release()
 
   pipeline.end()
 }
