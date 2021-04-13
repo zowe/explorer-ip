@@ -34,7 +34,11 @@ node('zowe-jenkins-agent-dind') {
     publishRegistry: [
       email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
       usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
-    ], 
+    ],
+    github: [
+      email                      : lib.Constants.DEFAULT_GITHUB_ROBOT_EMAIL,
+      usernamePasswordCredential : lib.Constants.DEFAULT_GITHUB_ROBOT_CREDENTIAL,
+    ],
     disableLint: true,
   )
 
@@ -59,9 +63,11 @@ node('zowe-jenkins-agent-dind') {
     ],
     allowPublishWithoutTest: true // There are no tests
   )
-
+  
   // define we need release stage
-  pipeline.release()
+  pipeline.release(
+    baseDirectory:'.'
+  )
 
   pipeline.end()
 }
