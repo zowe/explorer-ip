@@ -65,7 +65,9 @@ node('zowe-jenkins-agent-dind') {
   )
 
   pipeline.createStage(
-    operation: {
+    name          : "DEBUG",
+    isSkippable   : true,
+    stage         : {
       echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
       ls -al
       git remote -v
