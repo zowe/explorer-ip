@@ -76,11 +76,7 @@ node('zowe-jenkins-agent-dind') {
 
   // define we need release stage
   pipeline.release(
-    baseDirectory:'.',
-    isSkippable   : true,
-    shouldExecute : {
-      return true
-    }
+    baseDirectory:'.'
   )
 
   pipeline.end()
