@@ -68,10 +68,9 @@ node('zowe-jenkins-agent-dind') {
     name          : "DEBUG",
     isSkippable   : true,
     stage         : {
-      echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
       pipeline.github.initFromFolder()
-      println pipeline.github.properties
-      echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
+      echo "Repository is"
+      println pipeline.github.repository
     }
   )
   // define we need release stage
