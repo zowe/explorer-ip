@@ -73,9 +73,15 @@ node('zowe-jenkins-agent-dind') {
   //     println pipeline.github.repository
   //   }
   // )
-  
+
   // define we need release stage
-  pipeline.release(baseDirectory:'.')
+  pipeline.release(
+    baseDirectory:'.',
+    isSkippable   : true,
+    shouldExecute : {
+      return true
+    }
+  )
 
   pipeline.end()
 }
