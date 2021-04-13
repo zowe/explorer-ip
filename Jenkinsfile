@@ -20,57 +20,57 @@ node('zowe-jenkins-agent-dind') {
 
   pipeline.admins.add("nakul")
 
-  pipeline.setup(
-    packageName: 'org.zowe.explorer-ip',
-    baseDirectory: WEB_CLIENT,
-    nodeJsVersion: 'v10.18.1',
-    installRegistries: [
-      [
-        email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
-        usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
-        registry                   : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_INSTALL,
-      ]
-    ],
-    publishRegistry: [
-      email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
-      usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
-    ],
-    github: [
-      email                      : lib.Constants.DEFAULT_GITHUB_ROBOT_EMAIL,
-      usernamePasswordCredential : lib.Constants.DEFAULT_GITHUB_ROBOT_CREDENTIAL,
-    ],
-    disableLint: true,
-  )
+  // pipeline.setup(
+  //   packageName: 'org.zowe.explorer-ip',
+  //   baseDirectory: WEB_CLIENT,
+  //   nodeJsVersion: 'v10.18.1',
+  //   installRegistries: [
+  //     [
+  //       email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
+  //       usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
+  //       registry                   : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_INSTALL,
+  //     ]
+  //   ],
+  //   publishRegistry: [
+  //     email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
+  //     usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
+  //   ],
+  //   github: [
+  //     email                      : lib.Constants.DEFAULT_GITHUB_ROBOT_EMAIL,
+  //     usernamePasswordCredential : lib.Constants.DEFAULT_GITHUB_ROBOT_CREDENTIAL,
+  //   ],
+  //   disableLint: true,
+  // )
 
-  pipeline.build(
-    operation: {
-      echo "Default npm build will be skipped."
-    }
-  )
+  // pipeline.build(
+  //   operation: {
+  //     echo "Default npm build will be skipped."
+  //   }
+  // )
 
-  // we have pax packaging step
-  pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
+  // // we have pax packaging step
+  // pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
 
-  // define we need publish stage
-  pipeline.publish(
-    operation: {
-      echo "Default npm publish will be skipped."
-    },
-    baseDirectory:'.',
-    artifacts: [
-      '.pax/explorer-ip.pax',
-      '.pax/explorer-ip.tar'
-    ],
-    allowPublishWithoutTest: true // There are no tests
-  )
+  // // define we need publish stage
+  // pipeline.publish(
+  //   operation: {
+  //     echo "Default npm publish will be skipped."
+  //   },
+  //   baseDirectory:'.',
+  //   artifacts: [
+  //     '.pax/explorer-ip.pax',
+  //     '.pax/explorer-ip.tar'
+  //   ],
+  //   allowPublishWithoutTest: true // There are no tests
+  // )
 
   pipeline.createStage(
     name          : "DEBUG",
     isSkippable   : true,
     stage         : {
       echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
-      sh "ls -al"
-      sh "git remote -v"
+      pipeline.github.initFromFolder()
+      println pipeline.github.properties
       echo "DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"
     }
   )
