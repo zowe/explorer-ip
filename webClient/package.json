@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "webpack --progress --watch",
-    "build": "webpack --progress",
+    "build": "webpack --progress --mode production",
     "dev-deploy": "webpack --progress && ../transfer.sh",
     "eject": "react-scripts-ts eject"
   },
@@ -28,6 +28,7 @@
     "@types/long": "^4.0.1",
     "@types/react": "^16.14.2",
     "@types/react-dom": "~16.0.11",
+    "compression-webpack-plugin": "^7.1.2",
     "copy-webpack-plugin": "^6.2.1",
     "css-loader": "~5.2.1",
     "exports-loader": "~2.0.0",

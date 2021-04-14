@@ -12,6 +12,7 @@
 
 var path = require('path');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
 var baseConfig = require(path.resolve(process.env.MVD_DESKTOP_DIR, 'plugin-config/webpack.react.base.js'));
 
 if (process.env.MVD_DESKTOP_DIR == null) {
@@ -34,7 +35,11 @@ var config = {
           to: path.resolve('../web/assets')
         }
       ]}
-    )
+    ),
+    new CompressionPlugin({
+      threshold: 50000,
+      minRatio: 0.8
+    })
   ],
   'module': {
     'rules': [
