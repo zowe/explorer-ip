@@ -22,7 +22,8 @@ node('zowe-jenkins-agent-dind') {
     [
         name    : 'users/tom/releasefix',
         allowRelease: true,
-        allowFormalRelease: true
+        allowFormalRelease: true,
+        isProtected: true
     ]
   ])
 
