@@ -16,7 +16,7 @@ def DATASERVICE = 'dataService'
 node('zowe-jenkins-agent-dind') {
   def lib = library("jenkins-library").org.zowe.jenkins_shared_library
 
-  def pipeline = lib.pipelines.generic.GenericPipeline.new(this)
+  def pipeline = lib.pipelines.nodejs.NodeJSPipeline.new(this)
 
   pipeline.admins.add("nakul")
 
@@ -45,12 +45,10 @@ node('zowe-jenkins-agent-dind') {
   )
 
   pipeline.createStage(
-    name          : "DEBUG",
+    name          : "Init github from root",
     isSkippable   : true,
     stage         : {
       pipeline.github.initFromFolder()
-      echo "Repository is"
-      println pipeline.github.repository
     }
   )
 
