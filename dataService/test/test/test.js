@@ -41,6 +41,36 @@ describe('Test explorer-ip', function () {
     });
   });
 
+  describe('Verify gettcpipname endpoint', function () {
+
+    it('Verify successful request', async function () {
+      response = await instance.get('/gettcpipname', {
+        baseURL: rootURL
+      })
+      expect(response.status).to.equal(200);
+      expect(response.data).to.have.property('tcpip');
+      expect(response.data.tcpip).to.not.be.empty;
+      expect(response.data.tcpip).to.have.all.keys('tcpipName');
+      expect(response.data.tcpip.tcpipName).to.include('TCPIP')
+    });
+
+    it('Verify bad method', async function () {
+      try {
+        response = await instance.post('/gettcpipname', {
+          baseURL: rootURL
+        })
+        throw 'shouldFail'
+      } catch (e) {
+        // Assert fail when the request succeeds
+        if (e === 'shouldFail') {
+          expect.fail('The request should fail.');
+        }
+        expect(e.response.status).to.equal(405);
+        expect(e.response.data.error).to.equal('Only GET requests are supported');
+      }
+    });
+  });
+
   describe('Verify request failures', function () {
 
     it('Verify bad method', async function () {

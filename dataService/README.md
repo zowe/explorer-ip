@@ -23,6 +23,24 @@ install-dir
 - webClient
 - ...
 
+# Data service functions
+The data service is installed by ZSS server to URI `/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/**`
+
+## Endpoints
+The data service supports following endpoints:
+1. <code>/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/<b>gettcpipname</b></code>
+   
+    returns a structure containing a name of TCPIP stack. The name is internally retrieved by the [\_\_iptcpn()](https://www.ibm.com/docs/en/zos/2.4.0?topic=functions-iptcpn-retrieve-resolver-supplied-jobname-user-id) function.
+   
+2. <code>/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/<b>\<tcpipname\>/\<function\></b></code>
+
+    where `<tcpipname>` denotes a name of a TCPIP stack that is being queried and `<function>` is one of the following:
+    
+    1. `info` - returns basic information about a TCPIP stack
+    2. `connections` - returns a list of TCP connections
+    3. `listeners` - returns a list of TCP listeners
+    4. `ports` - returns a list of reserverd ports
+
 # Filtering
 Filters are supported for `connections`, `listeners` and `ports` endpoints of the explorer-ip data service. Filters are passed to the data service as HTTP GET request parameters, e.g. <code>ht<span>tp://</span>example.com<b>?filter1=foo&filter2=bar</b></code> where two parameters are specified, the `filter1` parameter with the `foo` value and the `filter2` parameter with the `bar` value.
 
