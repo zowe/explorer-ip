@@ -18,6 +18,14 @@ node('zowe-jenkins-agent-dind') {
 
   def pipeline = lib.pipelines.nodejs.NodeJSPipeline.new(this)
 
+  pipeline.branches.addMap([
+    [
+        name    : 'users/tom/releasefix',
+        allowRelease: true,
+        allowFormalRelease: true
+    ]
+  ])
+
   pipeline.admins.add("nakul")
 
   pipeline.setup(
