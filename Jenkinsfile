@@ -80,7 +80,8 @@ node('zowe-jenkins-agent-dind') {
   // define we need release stage
   pipeline.release(
     baseDirectory:'WEB_CLIENT',
-    NODE_ENV:'production'
+    NODE_ENV:'production',
+    shouldExecute: true
   )
 
   pipeline.end()
