@@ -35,7 +35,69 @@ var config = {
         }
       ]}
     )
-  ]
+  ],
+  'module': {
+    'rules': [
+      {
+        /* Javascript source map loader */
+        'enforce': 'pre',
+        'test': /\.js$/,
+        'loader': 'source-map-loader',
+        'exclude': [
+          /\/node_modules\//
+        ]
+      },
+      {
+        /* JSON inline loader */
+        'test': /\.json$/,
+        'loader': 'json-loader'
+      },
+      {
+        /* HTML URL resolution loader */
+        'test': /\.html$/,
+        'loader': 'html-loader'
+      },
+      {
+        'test': /\.svg$/,
+        'loader': 'svg-sprite-loader'
+      },
+      {
+        /* External file loader */
+        'test': /\.eot$/,
+        'loader': 'file-loader',
+        'options': {
+          'name': '[name].[hash:20].[ext]'
+        }
+      },
+      {
+        /* External (or inline) file loader */
+        'test': /\.(jpg|png|gif|otf|ttf|woff|woff2|cur|ani)$/,
+        'loader': 'url-loader',
+        'options': {
+          'name':'[name].[hash:20].[ext]', 
+          'limit': '10000'
+        }
+      },
+      {
+        /* CSS URL loader, TODO: reconsider */
+        'test': /\.css$/,
+        'use': [
+          'exports-loader?module.exports.toString()',
+          {
+            'loader': 'css-loader',
+            'options': {
+              'sourceMap': false
+            }
+          }
+        ]
+      },
+      {
+        /* TS and angular loader */
+        'test': /\.(ts|tsx)$/,
+        'loader': 'ts-loader',
+      }      
+    ]
+  }
 };
 
 function deepMerge(base, extension) {
