@@ -35,16 +35,20 @@ node('zowe-jenkins-agent-dind') {
       email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
       usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
     ],
-    github: [
-      email                      : lib.Constants.DEFAULT_GITHUB_ROBOT_EMAIL,
-      usernamePasswordCredential : lib.Constants.DEFAULT_GITHUB_ROBOT_CREDENTIAL,
-    ],
     disableLint: true,
   )
 
   pipeline.build(
     operation: {
       echo "Default npm build will be skipped."
+    }
+  )
+
+  pipeline.createStage(
+    name          : "Init github from root",
+    isSkippable   : true,
+    stage         : {
+      pipeline.github.initFromFolder()
     }
   )
 
