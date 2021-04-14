@@ -16,7 +16,7 @@ def DATASERVICE = 'dataService'
 node('zowe-jenkins-agent-dind') {
   def lib = library("jenkins-library").org.zowe.jenkins_shared_library
 
-  def pipeline = lib.pipelines.nodejs.GenericPipeline.new(this)
+  def pipeline = lib.pipelines.generic.GenericPipeline.new(this)
 
   pipeline.admins.add("nakul")
 
