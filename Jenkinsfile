@@ -44,6 +44,16 @@ node('zowe-jenkins-agent-dind') {
     }
   )
 
+  pipeline.createStage(
+    name          : "DEBUG",
+    isSkippable   : true,
+    stage         : {
+      pipeline.github.initFromFolder()
+      echo "Repository is"
+      println pipeline.github.repository
+    }
+  )
+
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
 
