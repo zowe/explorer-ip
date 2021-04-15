@@ -81,7 +81,9 @@ node('zowe-jenkins-agent-dind') {
   pipeline.release(
     baseDirectory:'WEB_CLIENT',
     NODE_ENV:'production',
-    shouldExecute: true
+    showExecute: {
+      return true
+    }
   )
 
   pipeline.end()
