@@ -7,10 +7,10 @@
 
   Copyright Contributors to the Zowe Project.
 */
-import { ReactMVDResources as ReactMVDResourcesType } from 'pluginlib/react-inject-resources';
+import { ReactMVDResources } from 'pluginlib/react-inject-resources';
 import { WithTranslation } from 'react-i18next';
 
-export type ReactMVDResources = ReactMVDResourcesType; // REVIEW
+export type ReactMVDResources = ReactMVDResources; // REVIEW
 
 export interface Page {
     id: string;
@@ -27,6 +27,7 @@ export interface TableProps extends WithTranslation {
   loading: boolean,
   logger: any,
   predefinedFilter?: string,
+  openJobActions: ZLUX.Action[],
 }
 
 export interface OPDataRow {

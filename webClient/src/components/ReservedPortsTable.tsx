@@ -13,8 +13,6 @@ import {
   Button,
   ButtonGroup,
   IconButton,
-  Menu,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -25,6 +23,7 @@ import {
 import { Alert, Skeleton } from '@material-ui/lab';
 import Refresh from '@material-ui/icons/Refresh';
 import TableHeaderWithSorting from './TableParts/TableHeaderWithSorting';
+import LabelWithMenu from './TableParts/LabelWithMenu';
 import SearchField from './TableParts/SearchField';
 import LimitRow from './TableParts/LimitRow';
 import { getComparator, stableSort } from '../utilities/stableSort';
@@ -46,7 +45,6 @@ interface RPTableState {
   order: 'asc' | 'desc',
   orderBy: HeadCell["id"],
   tcp: boolean,
-  openJobActions: ZLUX.Action[],
 }
 
 class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
@@ -57,7 +55,6 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
       order: null,
       orderBy: null,
       tcp: true,
-      openJobActions: null,
     }
   }
 
@@ -73,33 +70,10 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
     return !!orderBy && (order !== this.props.preferredSorting.order || orderBy !== this.props.preferredSorting.orderBy);
   }
 
-  findActions(): void {
-    const dispatcher = ZoweZLUX.dispatcher;
-    const screenContext: any = {
-      sourcePluginID: "org.zowe.explorer-ip",
-      type: "open-job",
-    };
-    const recognizers = dispatcher.getRecognizers(screenContext);
-    if (recognizers.length > 0) {
-      const actions = recognizers
-        .map((recognizer: ZLUX.RecognizerObject) => dispatcher.getAction(recognizer))
-        .filter((action: ZLUX.Action) => !!action)
-        .map((action: ZLUX.Action) => {
-          action.type = dispatcher.constants.ActionType[action.type];
-          action.targetMode = dispatcher.constants.ActionTargetMode[action.targetMode];
-          return action;
-        })
-        this.setState({openJobActions: actions});
-    } 
-  }
-
   componentDidMount() {
     const {ports, error} = this.props.ports;
     if (!ports.length || error) {
       this.props.getPorts();
-    }
-    if (!this.state.openJobActions) {
-      this.findActions();
     }
   }
 
@@ -152,8 +126,8 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
                   .slice(0, ROWLIMIT)
                   .map((row, index) => <TableRow key={index}>
                     {headCells.map(cell => <TableCell align={cell.numeric ? 'right' : 'left'}>
-                      {(cell.id === 'jobname' && this.state.openJobActions && this.state.openJobActions.length > 0)
-                        ? <JobCellWithMenu jobName={row[cell.id]} actions={this.state.openJobActions}/>
+                      {(cell.id === 'jobname' && this.props.openJobActions && this.props.openJobActions.length > 0)
+                        ? <LabelWithMenu jobName={row[cell.id]} actions={this.props.openJobActions}/>
                         : row[cell.id]
                       }</TableCell>)}
                   </TableRow>)
@@ -172,40 +146,6 @@ class ReservedPortsTable extends React.Component<TableProps, RPTableState> {
       </div>
     );
   }
-}
-
-function JobCellWithMenu(props: {jobName: string | number, actions: ZLUX.Action[]}) {
-  const {jobName, actions} = props;
-  const dispatcher = ZoweZLUX.dispatcher;
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = (action: ZLUX.Action) => {
-    setAnchorEl(null);
-    if (action) {
-      const parameters = {owner: '*', jobId: '*', prefix: jobName};
-      const argumentData = {'data': parameters};
-      dispatcher.invokeAction(action, argumentData);
-    }
-  };
-
-  return (
-    <div>
-      <div onClick={handleClick} style={styles.clickableText}>{jobName}</div> 
-      <Menu
-        id="job-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {actions.map((action: ZLUX.Action) => <MenuItem onClick={() => handleClose(action)}>{action.defaultName}</MenuItem>)}
-      </Menu>
-    </div>
-  );
 }
 
 export default withTranslation('translation')(ReservedPortsTable);

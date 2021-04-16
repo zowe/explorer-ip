@@ -18,15 +18,17 @@ import {
   } from '@material-ui/core';
 import { KeyboardArrowUp } from '@material-ui/icons';
 import TooltipCell from './TooltipCell';
-import STCKtoTS from '../../utilities/STCKtoTS'
+import STCKtoTS from '../../utilities/STCKtoTS';
 import styles from '../../App-css';
 import { HeadCell } from '../../common/types';
+import LabelWithMenu from './LabelWithMenu';
 
 interface RowProps {
     row: any,
     t: any
     headCells: HeadCell[],
     detailLabels: any[],
+    openJobActions: ZLUX.Action[],
   }
 
 interface RowState {
@@ -80,9 +82,23 @@ export default class ExpandableTableRow extends React.Component<RowProps, RowSta
                 <KeyboardArrowUp style={{transform: isOpen ? 'none' : 'rotate(180deg)'}}/>
               </IconButton>
             </TableCell>
-            {headCells.map(cell => cell.id === 'localIPaddress' || cell.id === 'remoteIPaddress'
-              ? <TooltipCell value={row[cell.id]}/>
-              : <TableCell align={cell.numeric ? 'right' : 'left'}>{row[cell.id]}</TableCell>)}
+            {headCells.map(cell => {
+              switch (cell.id) {
+                case 'localIPaddress':
+                case 'remoteIPaddress':
+                  return <TooltipCell value={row[cell.id]}/>
+                case 'resourceName':
+                  if (this.props.openJobActions && this.props.openJobActions.length > 0) {
+                    return (
+                      <TableCell align={cell.numeric ? 'right' : 'left'}>
+                        <LabelWithMenu jobName={row[cell.id]} actions={this.props.openJobActions}/>
+                      </TableCell>
+                    )
+                  }
+                default:
+                  return <TableCell align={cell.numeric ? 'right' : 'left'}>{row[cell.id]}</TableCell>
+              }
+            })}
           </TableRow>
           <TableRow>
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
