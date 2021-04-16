@@ -11,9 +11,8 @@
 */
 
 var path = require('path');
+var webpackConfig = require('webpack-config');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-const CompressionPlugin = require("compression-webpack-plugin");
-var baseConfig = require(path.resolve(process.env.MVD_DESKTOP_DIR, 'plugin-config/webpack.react.base.js'));
 
 if (process.env.MVD_DESKTOP_DIR == null) {
   throw new Error('You must specify MVD_DESKTOP_DIR in your environment');
@@ -28,102 +27,18 @@ var config = {
     'filename': 'main.js',
   },
   'plugins': [
-    new CopyWebpackPlugin({ 
-      patterns: [
-        {
-          from: path.resolve(__dirname, './src/assets'),
-          to: path.resolve('../web/assets')
-        }
-      ]}
-    ),
-    new CompressionPlugin({
-      threshold: 50000,
-      minRatio: 0.8
-    })
-  ],
-  'module': {
-    'rules': [
+    new CopyWebpackPlugin([
       {
-        /* Javascript source map loader */
-        'enforce': 'pre',
-        'test': /\.js$/,
-        'loader': 'source-map-loader',
-        'exclude': [
-          /\/node_modules\//
-        ]
-      },
-      {
-        /* JSON inline loader */
-        'test': /\.json$/,
-        'loader': 'json-loader'
-      },
-      {
-        /* HTML URL resolution loader */
-        'test': /\.html$/,
-        'loader': 'html-loader'
-      },
-      {
-        'test': /\.svg$/,
-        'loader': 'svg-sprite-loader'
-      },
-      {
-        /* External file loader */
-        'test': /\.eot$/,
-        'loader': 'file-loader',
-        'options': {
-          'name': '[name].[hash:20].[ext]'
-        }
-      },
-      {
-        /* External (or inline) file loader */
-        'test': /\.(jpg|png|gif|otf|ttf|woff|woff2|cur|ani)$/,
-        'loader': 'url-loader',
-        'options': {
-          'name':'[name].[hash:20].[ext]', 
-          'limit': '10000'
-        }
-      },
-      {
-        /* CSS URL loader, TODO: reconsider */
-        'test': /\.css$/,
-        'use': [
-          'exports-loader?module.exports.toString()',
-          {
-            'loader': 'css-loader',
-            'options': {
-              'sourceMap': false
-            }
-          }
-        ]
-      },
-      {
-        /* TS and angular loader */
-        'test': /\.(ts|tsx)$/,
-        'loader': 'ts-loader',
-      }      
-    ]
-  }
+        from: path.resolve(__dirname, './src/assets'),
+        to: path.resolve('../web/assets')
+      }
+    ])
+  ]
 };
 
-function deepMerge(base, extension) {
-  if (isObject(base) && isObject(extension)) {
-    for (const key in extension) {
-      if (isObject(extension[key])) {
-        if (!base[key]) base[key] = {};
-        deepMerge(base[key], extension[key]);
-      } else {
-        Object.assign(base, {[key]: extension[key]});
-      }
-    }
-  }
-  return base;
-}
-
-function isObject(item) {
-  return (item && typeof item === 'object' && !Array.isArray(item));
-}
-
-module.exports = deepMerge(baseConfig, config);
+module.exports = new webpackConfig.Config()
+  .extend(path.resolve(process.env.MVD_DESKTOP_DIR, 'plugin-config/webpack.react.base.js'))
+  .merge(config);
 
 
 /*
