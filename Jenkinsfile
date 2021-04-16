@@ -36,6 +36,7 @@ node('zowe-jenkins-agent-dind') {
       usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
     ],
     disableLint: true,
+    ignoreAuditFailure: true
   )
 
   pipeline.build(
