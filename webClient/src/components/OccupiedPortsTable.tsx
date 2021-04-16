@@ -99,7 +99,7 @@ class OccupiedPortsTable extends React.Component<TableProps, OPTableState> {
     const { filter } = this.state;
     const order = this.state.order || this.props.preferredSorting.order || 'asc';
     const orderBy = this.state.orderBy || this.props.preferredSorting.orderBy || 'localPort';
-    const { t, loading } = this.props;
+    const { t, loading, openJobActions } = this.props;
     const { ports, timestamp, error } = this.props.ports;
     const rowToLine = (row: Object) => {
       const rowKeys = headCells.map(c => (c.id).toString());
@@ -140,6 +140,7 @@ class OccupiedPortsTable extends React.Component<TableProps, OPTableState> {
                     t={t}
                     headCells={headCells}
                     detailLabels={detailLabels}
+                    openJobActions={openJobActions}
                   />)
                 }
                 {filteredPorts.length > ROWLIMIT

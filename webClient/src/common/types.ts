@@ -27,6 +27,7 @@ export interface TableProps extends WithTranslation {
   loading: boolean,
   logger: any,
   predefinedFilter?: string,
+  openJobActions: ZLUX.Action[],
 }
 
 export interface OPDataRow {

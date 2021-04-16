@@ -31,6 +31,7 @@ interface AppState {
   ipexplorerApi: any,
   preload: boolean,
   showTCPIPDialog: boolean,
+  openJobActions: ZLUX.Action[],
 }
 
 class App extends React.Component<any, AppState> {
@@ -53,6 +54,7 @@ class App extends React.Component<any, AppState> {
       ipexplorerApi: new IPExplorerApi(this.props.resources),
       preload: true,
       showTCPIPDialog: false,
+      openJobActions: null,
     };
     this.getOccupiedPortsList = this.getOccupiedPortsList.bind(this);
     this.getReservedPortsList = this.getReservedPortsList.bind(this);
@@ -61,6 +63,7 @@ class App extends React.Component<any, AppState> {
   };
 
   componentDidMount() {
+    this.findActions();
     // Workaround to support adjustable height.
     const pluginsCollection = document.getElementsByClassName("react-plugin-container");
     Array.from(pluginsCollection)
@@ -150,6 +153,30 @@ class App extends React.Component<any, AppState> {
       });
   }
 
+  findActions(): void {
+    const dispatcher = ZoweZLUX.dispatcher;
+    const screenContext: any = {
+      sourcePluginID: "org.zowe.explorer-ip",
+      type: "open-job",
+    };
+    const recognizers = dispatcher.getRecognizers(screenContext);
+    if (recognizers.length > 0) {
+      const actions = recognizers
+        .map((recognizer: ZLUX.RecognizerObject) => dispatcher.getAction(recognizer))
+        .filter((action: ZLUX.Action) => !!action)
+        .map((action: ZLUX.Action) => {
+          if(typeof action.targetMode === 'string') {
+            action.targetMode = ZoweZLUX.dispatcher.constants.ActionTargetMode[action.targetMode];
+          }
+          if(typeof action.type === 'string') {
+            action.type = ZoweZLUX.dispatcher.constants.ActionType[action.type];
+          }
+          return action;
+        })
+        this.setState({openJobActions: actions});
+    } 
+  }
+
   public render(): JSX.Element {
     const { t } = this.props;
     this.t = t;
@@ -160,6 +187,7 @@ class App extends React.Component<any, AppState> {
       logger: this.log,
       t: this.props.t,
       predefinedFilter: this.state.preferences.predefinedFilter || '',
+      openJobActions: this.state.openJobActions,
     }
 
     const OPTableProps = {
