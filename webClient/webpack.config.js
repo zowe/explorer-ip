@@ -11,8 +11,8 @@
 */
 
 var path = require('path');
-var webpackConfig = require('webpack-config');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var baseConfig = require(path.resolve(process.env.MVD_DESKTOP_DIR, 'plugin-config/webpack.react.base.js'));
 
 if (process.env.MVD_DESKTOP_DIR == null) {
   throw new Error('You must specify MVD_DESKTOP_DIR in your environment');
@@ -36,9 +36,25 @@ var config = {
   ]
 };
 
-module.exports = new webpackConfig.Config()
-  .extend(path.resolve(process.env.MVD_DESKTOP_DIR, 'plugin-config/webpack.react.base.js'))
-  .merge(config);
+function deepMerge(base, extension) {
+  if (isObject(base) && isObject(extension)) {
+    for (const key in extension) {
+      if (isObject(extension[key])) {
+        if (!base[key]) base[key] = {};
+        deepMerge(base[key], extension[key]);
+      } else {
+        Object.assign(base, {[key]: extension[key]});
+      }
+    }
+  }
+  return base;
+}
+
+function isObject(item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+module.exports = deepMerge(baseConfig, config);
 
 
 /*
