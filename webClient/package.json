@@ -17,9 +17,9 @@
     "react-router": "~4.3.1"
   },
   "scripts": {
-    "start": "webpack --progress --colors --watch",
-    "build": "webpack --progress --colors",
-    "dev-deploy": "webpack --progress --colors && ../transfer.sh",
+    "start": "webpack --progress --watch",
+    "build": "webpack --progress --mode production",
+    "dev-deploy": "webpack --progress && ../transfer.sh",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
