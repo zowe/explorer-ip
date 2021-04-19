@@ -20,16 +20,14 @@ export interface Page {
 
 export interface TableProps extends WithTranslation {
   ports: Ports,
-  ipexplorerApi: ReturnType<typeof Object>,
   getPorts: any,
   savePreferences: any,
   preferredSorting: any,
   t: any,
-  started: Date,
-  ipv6: boolean,
   loading: boolean,
   logger: any,
   predefinedFilter?: string,
+  openJobActions: ZLUX.Action[],
 }
 
 export interface OPDataRow {

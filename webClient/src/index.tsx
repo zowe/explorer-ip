@@ -13,15 +13,12 @@ import App from './App';
 import './assets/i18n/i18n';
 import { ReactMVDResources } from './common/types';
 import { MVDResources } from './mvd-resources';
-import IPExplorerApi from './services/IPExplorerApi';
 
 export function renderPlugin(domElement: HTMLElement, resources: ReactMVDResources): void {
 
-  const ipexplorerApi = new IPExplorerApi(resources);
-
   ReactDOM.render(
     <MVDResources.Provider value={resources}>
-      <App resources={resources} ipexplorerApi={ipexplorerApi}/>
+      <App resources={resources}/>
     </MVDResources.Provider>,
     domElement
   );

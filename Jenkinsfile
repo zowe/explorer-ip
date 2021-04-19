@@ -23,7 +23,7 @@ node('zowe-jenkins-agent-dind') {
   pipeline.setup(
     packageName: 'org.zowe.explorer-ip',
     baseDirectory: WEB_CLIENT,
-    nodeJsVersion: 'v10.18.1',
+    nodeJsVersion: 'v12.22.1',
     installRegistries: [
       [
         email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
@@ -36,6 +36,7 @@ node('zowe-jenkins-agent-dind') {
       usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
     ],
     disableLint: true,
+    ignoreAuditFailure: true
   )
 
   pipeline.build(

@@ -45,7 +45,7 @@ const NavigationTabs: React.FC<NavTabProps> = props => {
   const [value, toggle] = React.useState(0);
 
   return (
-    <div style={{height: '100%'}}>
+    <div style={styles.tabsContainer}>
       <AppBar position="static">
         <Tabs value={value} onChange={(event, newValue) => toggle(newValue)} aria-label="navigation tabs">
             {props.pages.map(p => <Tab label={p.label} id={`${p.id}-tab`} />)}
