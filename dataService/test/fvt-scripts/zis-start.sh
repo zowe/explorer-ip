@@ -1,0 +1,1 @@
+opercmd "S ZWESISTC"

@@ -62,7 +62,7 @@ node('zowe-jenkins-agent-dind') {
       echo "Preparing server for integration test ..."
       ansiColor('xterm') {
         // prepare environtment for integration test
-        sh "../dataService/test/prepare-fvt.sh"
+        sh "../dataService/test/fvt-scripts/prepare-fvt.sh"
       }
       // wait a while to give time for service to be started
       sleep time: 1, unit: 'MINUTES'
