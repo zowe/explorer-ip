@@ -55,6 +55,51 @@ node('zowe-jenkins-agent-dind') {
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
 
+  pipeline.test(
+    name          : 'Integration',
+    timeout       : [ time: 30, unit: 'MINUTES' ],
+    operation     : {
+      echo "Preparing server for integration test ..."
+      ansiColor('xterm') {
+        // prepare environtment for integration test
+        sh "../dataService/test/prepare-fvt.sh"
+      }
+      // wait a while to give time for service to be started
+      sleep time: 1, unit: 'MINUTES'
+
+      
+
+      echo "Starting integration test ..."
+      try {
+        withCredentials([
+          usernamePassword(
+            credentialsId: params.FVT_ZOSMF_CREDENTIAL,
+            passwordVariable: 'PASSWORD',
+            usernameVariable: 'USERNAME'
+          )
+        ]) 
+        {
+          ansiColor('xterm') {
+            sh """
+            ZSS_HOST=${USERNAME}
+            ZOWE_USERNAME=${USERNAME} \
+            ZOWE_PASSWORD=${PASSWORD} \
+            npm run install
+            npm run test
+            """
+          }
+        }
+      } catch (e) {
+        echo "Error with integration test: ${e}"
+        throw e
+      } finally {
+        // show logs (the folder should match the folder defined in prepare-fvt.sh)
+        sh "find .fvt/logs -type f | xargs -i sh -c 'echo \">>>>>>>>>>>>>>>>>>>>>>>> {} >>>>>>>>>>>>>>>>>>>>>>>\" && cat {}'"
+      }
+    },
+    junit         : "target/*.xml",
+  )
+
   // define we need publish stage
   pipeline.publish(
     operation: {
