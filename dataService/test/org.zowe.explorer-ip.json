@@ -1,0 +1,5 @@
+{
+  "identifier": "org.zowe.explorer-ip",
+  "pluginLocation": "content",
+  "relativeTo": "$ROOT_DIR"
+}

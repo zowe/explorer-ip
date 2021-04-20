@@ -12,12 +12,12 @@ const axios = require('axios');
 const expect = require('chai').expect;
 const assert = require('chai').assert
 
-const zssPort = 8542;
-const tcpip = "tcpip";
-const userid = "user";
-const password = "password";
-const rootURL = 'http://localhost:' + zssPort + '/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/';
-
+const zssHost = process.env.ZSS_HOST || "localhost";
+const zssPort = process.env.ZSS_PORT || 8542;
+const tcpip = process.env.TCIP_SERVICE_NAME || "tcpip";
+const userid = process.env.ZOWE_USERNAME || "user";
+const password = process.env.ZOWE_PASSWORD || "password";
+const rootURL = `http://${zssHost}:${zssPort}/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/`;
 
 describe('Test explorer-ip', function () {
 
