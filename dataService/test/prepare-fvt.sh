@@ -12,9 +12,13 @@ cd $TEST_DIR
 cp dummy-server.json "${SCRIPT_DIR}/instance/workspace/app-server/serverConfig/server.json"
 cp org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-server/org.zowe.explorer-ip.json"
 
-#build zss 
-cd $ZSS_DIR/build && ./build.sh 
+#build zss and zis
+cd $ZSS_DIR/build
+./build.sh zis
+./build.sh zss
 
 #start zis & zss
-# todo <start-zis>
-cd $ZSS_DIR/bin && ./zssServer $SCRIPT_DIR/instance/workspace/app-server/serverConfig/server.json
+# TODO start zis as STC
+
+# start zss
+./zssServer.sh $SCRIPT_DIR/instance/workspace/app-server/serverConfig/server.json

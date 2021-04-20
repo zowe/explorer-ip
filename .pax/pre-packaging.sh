@@ -28,7 +28,7 @@ cd dataService/build
 echo "[${SCRIPT_NAME}] successfully built dataService"
 
 # cleanup before tar
-# rm -rf zss
+rm -rf zss
 
 # create tar
 echo "[${SCRIPT_NAME}] creating tar"
