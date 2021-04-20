@@ -85,7 +85,7 @@ node('zowe-jenkins-agent-dind') {
             ZOWE_USERNAME=${USERNAME} \
             ZOWE_PASSWORD=${PASSWORD} \
             npm run install
-            npm run test
+            npm run test:fvt
             """
           }
         }
@@ -94,7 +94,7 @@ node('zowe-jenkins-agent-dind') {
         throw e
       } finally {
         // show logs (the folder should match the folder defined in prepare-fvt.sh)
-        sh "find .fvt/logs -type f | xargs -i sh -c 'echo \">>>>>>>>>>>>>>>>>>>>>>>> {} >>>>>>>>>>>>>>>>>>>>>>>\" && cat {}'"
+        sh "find ../dataService/test/target -type f | xargs -i sh -c 'echo \">>>>>>>>>>>>>>>>>>>>>>>> {} >>>>>>>>>>>>>>>>>>>>>>>\" && cat {}'"
       }
     },
     junit         : "target/*.xml",
