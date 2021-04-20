@@ -15,7 +15,10 @@
 # 
 # - build client
 #################################################################################
-nvm use 10.24.1
+set +x
+. /home/jenkins/.nvm/nvm.sh
+nvm use v10.24.1
+set -x
 # constants
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
