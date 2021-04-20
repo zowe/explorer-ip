@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "webpack --progress --watch",
-    "build": "webpack --progress --mode production",
+    "build": "node -v && webpack --progress --mode production",
     "dev-deploy": "webpack --progress && ../transfer.sh",
     "eject": "react-scripts-ts eject"
   },
