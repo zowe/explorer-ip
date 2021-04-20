@@ -9,8 +9,8 @@ export ROOT_DIR=$SCRIPT_DIR
 mkdir -p "${SCRIPT_DIR}/instance/workspace/app-server/serverConfig"
 mkdir -p "${SCRIPT_DIR}/instance/workspace/app-server/plugins"
 cd $TEST_DIR
-cp dummy-server.json "${SCRIPT_DIR}/instance/workspace/app-server/serverConfig/server.json"
-cp org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-server/org.zowe.explorer-ip.json"
+cp fvt-scripts/dummy-server.json "${SCRIPT_DIR}/instance/workspace/app-server/serverConfig/server.json"
+cp fvt-scripts/org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-server/org.zowe.explorer-ip.json"
 
 #build zss 
 cd $ZSS_DIR/build && ./build.sh 
