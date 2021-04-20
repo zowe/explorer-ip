@@ -1,4 +1,4 @@
-import * as i18next from 'i18next';
+import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 // import { MVDResources } from '../../mvd-resources';
@@ -85,7 +85,7 @@ const resources = {
   zh
 };
 
-i18next.use(initReactI18next).use(LanguageDetector).init({
+i18n.use(initReactI18next).use(LanguageDetector).init({
   resources,
   interpolation: { escapeValue: false },
   lng: window.ZoweZLUX.globalization.getLanguage(),
@@ -97,4 +97,4 @@ i18next.use(initReactI18next).use(LanguageDetector).init({
   whitelist: ['en', 'ja', 'zh', 'de', 'fr', 'ru'],
 });
 
-export default i18next;
+export default i18n;

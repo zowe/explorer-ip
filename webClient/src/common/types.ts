@@ -7,10 +7,10 @@
 
   Copyright Contributors to the Zowe Project.
 */
-import { ReactMVDResources } from 'pluginlib/react-inject-resources';
+import { ReactMVDResources as ReactMVDResourcesType } from 'pluginlib/react-inject-resources';
 import { WithTranslation } from 'react-i18next';
 
-export type ReactMVDResources = ReactMVDResources; // REVIEW
+export type ReactMVDResources = ReactMVDResourcesType; // REVIEW
 
 export interface Page {
     id: string;
