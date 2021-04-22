@@ -10,7 +10,7 @@
       "fallback": true
     },
     "http": {
-      "ipAddresses": ["0.0.0.0"],
+      "ipAddresses": ["127.0.0.1"],
       //to be a replacement for zssPort
       "port": 8542
     }
@@ -19,5 +19,5 @@
   "privilegedServerName": "ZWESIS_STD",
 // All paths relative to ZLUX/node or ZLUX/bin
 // In real installations, these values will be configured during the install.
-  "pluginsDir":"/u/myuser/instance/workspace/app-server/plugins"
+  "pluginsDir":"/path/to/instance/workspace/app-server/plugins"
 }

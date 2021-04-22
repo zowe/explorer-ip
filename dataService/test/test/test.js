@@ -17,6 +17,7 @@ const zssPort = process.env.ZSS_PORT || 8542;
 const tcpip = process.env.TCIP_SERVICE_NAME || "tcpip";
 const userid = process.env.ZOWE_USERNAME || "user";
 const password = process.env.ZOWE_PASSWORD || "password";
+const agentIP = '127.0.0.1';
 const rootURL = `http://${zssHost}:${zssPort}/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/`;
 
 describe('Test explorer-ip', function () {
@@ -177,7 +178,7 @@ describe('Test explorer-ip', function () {
       response = await instance.get('/connections', {
         params: {
           filterCount: 1,
-          fLocalIp_1: '127.0.0.1'
+          fLocalIp_1: agentIP
         }
       })
       expect(response.status).to.equal(200);
@@ -185,7 +186,7 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.connections);
       expect(response.data.connections).to.not.be.empty;
       response.data.connections.forEach(el => {
-        expect(el.localIPaddress).to.be.oneOf(['127.0.0.1', '::ffff:127.0.0.1']);
+        expect(el.localIPaddress).to.be.oneOf([agentIP, `::ffff:${agentIP}`]);
       });
     });
 
@@ -231,7 +232,7 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.connections);
       expect(response.data.connections).to.not.be.empty;
       response.data.connections.forEach(el => {
-        expect(el.localPort).to.equal(zssPort);
+        expect(el.localPort).to.equal(Number(zssPort));
       });
     });
 
@@ -239,7 +240,7 @@ describe('Test explorer-ip', function () {
       response = await instance.get('/connections', {
         params: {
           filterCount: 1,
-          fRemoteIp_1: '127.0.0.1'
+          fRemoteIp_1: agentIP
         }
       })
       expect(response.status).to.equal(200);
@@ -247,7 +248,7 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.connections);
       expect(response.data.connections).to.not.be.empty;
       response.data.connections.forEach(el => {
-        expect(el.remoteIPaddress).to.be.oneOf(['127.0.0.1', '::ffff:127.0.0.1']);
+        expect(el.remoteIPaddress).to.be.oneOf([agentIP, `::ffff:${agentIP}`]);
       });
     });
 
@@ -293,7 +294,7 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.connections);
       expect(response.data.connections).to.not.be.empty;
       response.data.connections.forEach(el => {
-        expect(el.remotePort).to.equal(zssPort);
+        expect(el.remotePort).to.equal(Number(zssPort));
       });
     });
 
@@ -386,7 +387,7 @@ describe('Test explorer-ip', function () {
       response = await instance.get('/listeners', {
         params: {
           filterCount: 1,
-          fLocalIp_1: '127.0.0.1'
+          fLocalIp_1: agentIP
         }
       })
       expect(response.status).to.equal(200);
@@ -394,7 +395,7 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.listeners);
       expect(response.data.listeners).to.not.be.empty;
       response.data.listeners.forEach(el => {
-        expect(el.localIPaddress).to.be.oneOf(['127.0.0.1', '::ffff:127.0.0.1']);
+        expect(el.localIPaddress).to.be.oneOf([agentIP, `::ffff:${agentIP}`]);
       });
     });
 
@@ -440,7 +441,7 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.listeners);
       expect(response.data.listeners).to.not.be.empty;
       response.data.listeners.forEach(el => {
-        expect(el.localPort).to.equal(zssPort);
+        expect(el.localPort).to.equal(Number(zssPort));
       });
     });
 
@@ -672,10 +673,10 @@ describe('Test explorer-ip', function () {
         params: {
           filterCount: 2,
           // first filter
-          fLocalIp_1: '127.0.0.1',
+          fLocalIp_1: agentIP,
           fLocalPort_1: zssPort,
           // second filter
-          fRemoteIp_2: '127.0.0.1',
+          fRemoteIp_2: agentIP,
           fRemotePort_2: zssPort
         }
       })
@@ -684,8 +685,8 @@ describe('Test explorer-ip', function () {
       assert.isArray(response.data.connections);
       expect(response.data.connections).to.not.be.empty;
       response.data.connections.forEach(el => {
-        expect(el).to.satisfy(el => (el.localIPaddress == '127.0.0.1' && el.localPort == zssPort) ||
-                                    (el.remoteIPaddress == '127.0.0.1' && el.remotePort == zssPort));
+        expect(el).to.satisfy(el => (el.localIPaddress == agentIP && el.localPort == zssPort) ||
+                                    (el.remoteIPaddress == agentIP && el.remotePort == zssPort));
       });
     });
 
@@ -698,10 +699,10 @@ describe('Test explorer-ip', function () {
         params: {
           filterCount: 3, // <-- three filters
           // first filter
-          fLocalIp_1: '127.0.0.1',
+          fLocalIp_1: agentIP,
           fLocalPort_1: zssPort,
           // second filter
-          fRemoteIp_2: '127.0.0.1',
+          fRemoteIp_2: agentIP,
           fRemotePort_2: zssPort
           // third filter left empty
         }
@@ -721,10 +722,10 @@ describe('Test explorer-ip', function () {
         params: {
           filterCount: 1,
           // first filter
-          fLocalIp_1: '127.0.0.1',
+          fLocalIp_1: agentIP,
           fLocalPort_1: zssPort,
           // second filter - should be ignored
-          fRemoteIp_2: '127.0.0.1',
+          fRemoteIp_2: agentIP,
           fRemotePort_2: zssPort
         }
       });
@@ -732,7 +733,7 @@ describe('Test explorer-ip', function () {
       expect(response.data).to.have.property('connections');
       assert.isArray(response.data.connections);
       expect(response.data.connections.length).to.be.equal(1);
-      expect(response.data.connections[0]).to.include({localIPaddress: '127.0.0.1', localPort: zssPort});
+      expect(response.data.connections[0]).to.include({localIPaddress: agentIP, localPort: Number(zssPort)});
     });
 
     it('Verify three filters', async function () {
