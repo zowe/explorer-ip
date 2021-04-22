@@ -15,6 +15,14 @@ cp fvt-scripts/org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-s
 #build zss 
 cd $ZSS_DIR/build && ./build.sh 
 
-#start zis & zss
-# todo <start-zis>
-cd $ZSS_DIR/bin && ./zssServer $SCRIPT_DIR/instance/workspace/app-server/serverConfig/server.json
+#start zis
+./zis-start.sh
+
+# start zss
+cd $ZSS_DIR/bin
+chmod 640 ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
+./zssServer ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
+
+# opercmd 'd parmlib'
+# PPT PGMNAME(ZWESIS01) KEY(4) NOSWAP
+# PPT PGMNAME(ZWESAUX) KEY(4) NOSWAP

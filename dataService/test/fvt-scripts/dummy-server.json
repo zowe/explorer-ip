@@ -19,5 +19,5 @@
   "privilegedServerName": "ZWESIS_STD",
 // All paths relative to ZLUX/node or ZLUX/bin
 // In real installations, these values will be configured during the install.
-  "pluginsDir":"/instance/workspace/app-server/plugins"
+  "pluginsDir":"/u/myuser/instance/workspace/app-server/plugins"
 }
