@@ -61,8 +61,10 @@ node('zowe-jenkins-agent-dind') {
     stage         : {
       // tar necessary files then prepare to upload to zOS
       sh "mkdir prepareTest"
-      sh "tar -C prepareTest -xvf .pax/explorer-ip.tar"
+      sh "tar -C prepareTest -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
       sh "ls -R prepareTest"
+      sh "cp -r zss prepareTest/dataService/build"
+      echo "now prepare to upload to zOS"
       
 
       echo "Preparing server for integration test ..."
