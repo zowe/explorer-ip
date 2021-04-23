@@ -60,9 +60,9 @@ node('zowe-jenkins-agent-dind') {
     timeout       : [ time: 30, unit: 'MINUTES' ],
     stage         : {
       echo "Preparing server for integration test ..."
-      sh "ls -al"
+      sh "cd .pax; ls"
       error
-      
+
       ansiColor('xterm') {
         // prepare environtment for integration test
         sh "../dataService/test/fvt-scripts/prepare-fvt.sh"
