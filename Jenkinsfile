@@ -55,11 +55,14 @@ node('zowe-jenkins-agent-dind') {
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
 
-  pipeline.test(
-    name          : 'Integration',
+  pipeline.createStage(
+    name          : 'Test',
     timeout       : [ time: 30, unit: 'MINUTES' ],
-    operation     : {
+    stage         : {
       echo "Preparing server for integration test ..."
+      sh "ls -al"
+      error
+      
       ansiColor('xterm') {
         // prepare environtment for integration test
         sh "../dataService/test/fvt-scripts/prepare-fvt.sh"

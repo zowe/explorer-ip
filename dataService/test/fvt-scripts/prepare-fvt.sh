@@ -16,6 +16,7 @@ cp fvt-scripts/org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-s
 cd $ZSS_DIR/build && ./build.sh 
 
 #start zis
+cd $TEST_DIR
 ./zis-start.sh
 
 # start zss
