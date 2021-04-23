@@ -59,7 +59,7 @@ node('zowe-jenkins-agent-dind') {
     name          : 'Test',
     timeout       : [ time: 30, unit: 'MINUTES' ],
     stage         : {
-      # tar necessary files then prepare to upload to zOS
+      // tar necessary files then prepare to upload to zOS
       sh "mkdir prepareTest"
       sh "tar -C /prepareTest -xvf .pax/explorer-ip.tar"
       sh "ls -R prepareTest"
