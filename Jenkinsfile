@@ -110,7 +110,7 @@ node('zowe-jenkins-agent-dind') {
         try {
           // send the tar to server
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e sftp -o BatchMode=no -o StrictHostKeyChecking=no -P ${SSH_PORT} -b - ${SSH_USER}@${SSH_HOST} << EOF
-put ${tarFile} ${serverWorkplace}
+put ${tarFile} ${serverWorkplace}/${tarFile}
 EOF"""
 
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} << EOF
