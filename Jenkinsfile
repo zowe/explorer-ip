@@ -114,7 +114,7 @@ put ${tarFile} ${serverWorkplace}
 EOF"""
 
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} << EOF
-cd ${serverWorkplaceRoot}
+cd ${serverWorkplace}
 pax -rf ${tarFile}
 cd testWorkspace
 chmod +x dataService/test/fvt-scripts/prepare-fvt.sh
