@@ -83,7 +83,7 @@ node('zowe-jenkins-agent-dind') {
       }
 
       // then init some variables
-      def paxFile = "exp-ip-test.tar"
+      def paxFile = "exp-ip-test.pax"
       def serverWorkplaceRoot = "/ZOWE/tmp"
       def branch = env.BRANCH_NAME
       if (branch.startsWith('origin/')) {
