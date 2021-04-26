@@ -120,7 +120,7 @@ exit 0
 EOF"""
         }
         catch (ex1) {
-          throw new PackageException("Prepare test failed: ${ex1}")
+          throw ex1
         }
       }
 
