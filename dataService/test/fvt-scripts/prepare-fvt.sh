@@ -1,8 +1,8 @@
 # constants
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-ZSS_DIR=$(cd "${SCRIPT_DIR}/content/dataService/build/zss" && pwd)
-TEST_DIR=$(cd "${SCRIPT_DIR}/content/dataService/test" && pwd)
+ZSS_DIR=$(cd "${SCRIPT_DIR}/dataService/build/zss" && pwd)
+TEST_DIR=$(cd "${SCRIPT_DIR}/dataService/test" && pwd)
 export ROOT_DIR=$SCRIPT_DIR
 
 # prepare instance directory
@@ -14,6 +14,9 @@ cp fvt-scripts/org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-s
 
 #build zss 
 cd $ZSS_DIR/build && ./build.sh 
+
+#we stop here for now
+exit
 
 #start zis
 cd $TEST_DIR

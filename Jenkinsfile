@@ -59,23 +59,74 @@ node('zowe-jenkins-agent-dind') {
     name          : 'Test',
     timeout       : [ time: 30, unit: 'MINUTES' ],
     stage         : {
-      // tar necessary files then prepare to upload to zOS
-      sh "mkdir prepareTest"
-      sh "tar -C prepareTest -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
-      sh "cp -r zss prepareTest/dataService/build"
-      echo "now prepare to upload to zOS" //TODO: TOM
+      // first define test server credentials
+      def serverCredentials = []
+      Map TEST_SERVERS = [
+        'marist': [
+          ansible_host     : 'marist-1',
+          ssh_hostport     : 'ssh-marist-server-zzow01-hostport',
+          ssh_userpass     : 'ssh-marist-server-zzow01'
+        ]
+      ];
       
+      TEST_SERVERS.each{ key, host ->
+        serverCredentials.add(usernamePassword(
+          credentialsId: host['ssh_hostport'],
+          passwordVariable: "SSH_PORT".toString(),
+          usernameVariable: "SSH_HOST".toString()
+        ))
+        serverCredentials.add(usernamePassword(
+          credentialsId: host['ssh_userpass'],
+          passwordVariable: "SSH_PASSWORD".toString(),
+          usernameVariable: "SSH_USER".toString()
+        ))
+      }
+
+      // then init some variables
+      def tarFile = "exp-ip-test.tar"
+      def serverWorkplaceRoot = "/ZOWE/tmp"
+      def branch = env.BRANCH_NAME
+      if (branch.startsWith('origin/')) {
+        branch = branch.substring(7)
+      }
+      branch = branch.replaceAll(/[^a-zA-Z0-9]/, '-').replaceAll(/[\-]+/, '-').toLowerCase()
+      def timestamp = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
+      def processUid = "explorer-ip-test-${branch}-${timestamp}"
+      def serverWorkplace = "${serverWorkplaceRoot}/${processUid}"
+
+      // tar required files
+      sh "mkdir testWorkspace"
+      sh "tar -C testWorkspace -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
+      sh "cp -r zss testWorkspace/dataService/build"
+      sh "tar -cf ${tarFile} testWorkspace"
+      echo "now prepare to upload to zOS and run prepare script"
+
+      withCredentials(serverCredentials) {
+        def failure
+        try {
+          // send the tar to server
+          sh """SSHPASS=${SSH_PASSWORD} sshpass -e sftp -o BatchMode=no -o StrictHostKeyChecking=no -P ${SSH_PORT} -b - ${SSH_USER}@${SSH_HOST} << EOF
+put ${tarFile} ${serverWorkplaceRoot}
+EOF"""
+
+          sh """SSHPASS=${SSH_PASSWORD} sshpass -e ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} << EOF
+cd ${serverWorkplaceRoot}
+tar -xf ${tarFile}
+cd testWorkspace
+chmod +x dataService/test/fvt-scripts/prepare-fvt.sh
+. dataService/test/fvt-scripts/prepare-fvt.sh
+sleep 60
+exit 0
+EOF"""
+        }
+        catch (ex1) {
+          throw new PackageException("Prepare test failed: ${ex1}")
+        }
+      }
 
       echo "Preparing server for integration test ..."
       
-      error
-
-      ansiColor('xterm') {
-        // prepare environtment for integration test
-        sh "../dataService/test/fvt-scripts/prepare-fvt.sh"
-      }
-      // wait a while to give time for service to be started
-      sleep time: 1, unit: 'MINUTES'
+      
 
       
 
