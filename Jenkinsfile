@@ -83,7 +83,7 @@ node('zowe-jenkins-agent-dind') {
       }
 
       // then init some variables
-      def tarFile = "exp-ip-test.tar"
+      def paxFile = "exp-ip-test.tar"
       def serverWorkplaceRoot = "/ZOWE/tmp"
       def branch = env.BRANCH_NAME
       if (branch.startsWith('origin/')) {
@@ -94,11 +94,15 @@ node('zowe-jenkins-agent-dind') {
       def processUid = "explorer-ip-test-${branch}-${timestamp}"
       def serverWorkplace = "${serverWorkplaceRoot}/${processUid}"
 
-      // tar required files
+      // untar required files
       sh "mkdir testWorkspace"
       sh "tar -C testWorkspace -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
+
+      // clean up zss folder then copy into dataService
+      sh "rm -rf zss/.git*"
       sh "cp -r zss testWorkspace/dataService/build"
-      sh "tar -cf ${tarFile} testWorkspace"
+
+      sh "pax -x pax -wf ${paxFile} testWorkspace"
       echo "now prepare to upload to zOS and run prepare script"
 
       withCredentials(serverCredentials) {
@@ -106,12 +110,12 @@ node('zowe-jenkins-agent-dind') {
         try {
           // send the tar to server
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e sftp -o BatchMode=no -o StrictHostKeyChecking=no -P ${SSH_PORT} -b - ${SSH_USER}@${SSH_HOST} << EOF
-put ${tarFile} ${serverWorkplaceRoot}
+put ${paxFile} ${serverWorkplace}
 EOF"""
 
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} << EOF
 cd ${serverWorkplaceRoot}
-tar -xf ${tarFile}
+pax -rf ${paxFile}
 cd testWorkspace
 chmod +x dataService/test/fvt-scripts/prepare-fvt.sh
 . dataService/test/fvt-scripts/prepare-fvt.sh
