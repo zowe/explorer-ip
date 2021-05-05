@@ -55,6 +55,7 @@ node('zowe-jenkins-agent-dind') {
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
 
+
   pipeline.createStage(
     name          : 'Test',
     timeout       : [ time: 30, unit: 'MINUTES' ],

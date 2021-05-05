@@ -6,11 +6,11 @@ TEST_DIR=$(cd "${SCRIPT_DIR}/dataService/test" && pwd)
 export ROOT_DIR=$SCRIPT_DIR
 
 # prepare instance directory
-mkdir -p "${SCRIPT_DIR}/instance/workspace/app-server/serverConfig"
-mkdir -p "${SCRIPT_DIR}/instance/workspace/app-server/plugins"
+mkdir -p "${ZSS_DIR}/instance/workspace/app-server/serverConfig"
+mkdir -p "${ZSS_DIR}/instance/workspace/app-server/plugins"
 cd $TEST_DIR
-cp fvt-scripts/dummy-server.json "${SCRIPT_DIR}/instance/workspace/app-server/serverConfig/server.json"
-cp fvt-scripts/org.zowe.explorer-ip.json "${SCRIPT_DIR}/instance/workspace/app-server/org.zowe.explorer-ip.json"
+cp fvt-scripts/dummy-server.json "${ZSS_DIR}/instance/workspace/app-server/serverConfig/server.json"
+cp fvt-scripts/org.zowe.explorer-ip.json "${ZSS_DIR}/instance/workspace/app-server/plugins/org.zowe.explorer-ip.json"
 
 #build zss 
 cd $ZSS_DIR/build && ./build.sh 
