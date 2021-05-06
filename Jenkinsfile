@@ -101,7 +101,7 @@ node('zowe-jenkins-agent-dind') {
 
       // clean up zss folder then copy into dataService
       sh "rm -rf zss/.git*"
-      sh "cp -r zss testWorkspace/dataService/build"
+      sh "cp -r zss testWorkspace"
 
       sh "tar -cf ${tarFile} testWorkspace"
       echo "now prepare to upload to zOS and run prepare script"
@@ -121,7 +121,7 @@ cd ${serverWorkplace}
 pax -rf ${tarFile}
 cd testWorkspace
 chmod +x dataService/test/fvt-scripts/prepare-fvt.sh
-. dataService/test/fvt-scripts/prepare-fvt.sh
+. dataService/test/fvt-scripts/prepare-fvt.sh ${SSH_USER}
 sleep 60
 exit 0
 EOF"""
@@ -133,7 +133,7 @@ EOF"""
 
       echo "Preparing server for integration test ..."
       
-      
+      error //hardstop here
 
       
 
