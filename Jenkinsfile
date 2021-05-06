@@ -97,11 +97,14 @@ node('zowe-jenkins-agent-dind') {
       def processUid = "explorer-ip-test-${branch}-${timestamp}"
       def serverWorkplace = "${serverWorkplaceRoot}/${processUid}"
 
-      // untar required files
+      // prep
+      sh "mkdir ${localTestWorkspace}"
       sh "mkdir ${localTestWorkspace}/content"
+      
+      // untar required files
       sh "tar -C ${localTestWorkspace}/content -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
 
-      // clean up zss folder then copy into dataService
+      // clean up zss folder then copy into content
       sh "rm -rf zss/.git*"
       sh "cp -r zss ${localTestWorkspace}/content"
 
@@ -109,10 +112,12 @@ node('zowe-jenkins-agent-dind') {
       sh "rm -fr ${localTestWorkspace}/ascii"
       sh "mkdir -p ${localTestWorkspace}/ascii"
 
+      // copy ascii files to ascii
       sh "rsync -rv --include '*.json' --include '*.html' --include '*.jcl' --include '*.template' --include '*.so' \
           --exclude '*.zip' --exclude '*.png' --exclude '*.tgz' --exclude '*.tar.gz' --exclude '*.pax' \
           --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content/' '${localTestWorkspace}/ascii'"
 
+      // make tar
       sh "cd ${localTestWorkspace}"
       sh "tar -cf ${tarFileAscii} ascii"
       sh "rm -rf ascii"
