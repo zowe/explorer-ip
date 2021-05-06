@@ -1,4 +1,5 @@
-# purge active jobs if exists
+# cancel active jobs if exists, then purge output
+opercmd "C JOB(ZWESISTT)"
 opercmd "P O OUTPUT(ZWESISTT)"
 
 # pre clean up datasets
