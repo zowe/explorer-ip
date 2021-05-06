@@ -1,3 +1,6 @@
+# purge active jobs if exists
+opercmd "P O OUTPUT(ZWESISTT)"
+
 # pre clean up datasets
 USERNAME=$1
 DS_JCL=${USERNAME}.DEV.JCL
@@ -21,6 +24,4 @@ cleanup_dataset $DS_JCL
 cleanup_dataset $DS_PARMLIB
 cleanup_dataset $DS_LOADLIB
 
-# purge active jobs if exists
-opercmd "P O OUTPUT(ZWESISTT)"
 exit 0
