@@ -109,10 +109,10 @@ node('zowe-jenkins-agent-dind') {
       sh "rm -rf zss/.git*"
       sh "cp -r zss ${localTestWorkspace}/content"
 
-      // copy ascii files to ascii
+      // copy zss ascii files to ascii
       sh "rsync -rv --include '*.json' --include '*.html' --include '*.jcl' --include '*.template' --include '*.so' \
           --exclude '*.zip' --exclude '*.png' --exclude '*.tgz' --exclude '*.tar.gz' --exclude '*.pax' \
-          --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content/' '${localTestWorkspace}/ascii'"
+          --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content/zss' '${localTestWorkspace}/ascii'"
       
       // make tar
       sh "cd ${localTestWorkspace};\
@@ -144,6 +144,7 @@ pax -r -x tar -o to=IBM-1047 -f ${tarFileAscii}
 rm ${tarFile}
 rm ${tarFileAscii}
 cp -R ascii/. content
+rm -r ascii
 cd content
 chmod +x dataService/test/fvt-scripts/*.sh 
 chmod +x dataService/test/fvt-scripts/opercmd
