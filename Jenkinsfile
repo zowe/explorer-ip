@@ -113,7 +113,7 @@ node('zowe-jenkins-agent-dind') {
       sh "rsync -rv --include '*.json' --include '*.html' --include '*.jcl' --include '*.template' --include '*.so' \
           --exclude '*.zip' --exclude '*.png' --exclude '*.tgz' --exclude '*.tar.gz' --exclude '*.pax' \
           --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content' '${localTestWorkspace}/ascii'"
-
+      sh "ls -lra"
       // make tar
       sh "cd ${localTestWorkspace};\
           tar -cf ${tarFileAscii} ascii;\
