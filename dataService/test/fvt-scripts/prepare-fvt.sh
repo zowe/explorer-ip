@@ -15,6 +15,7 @@ cp fvt-scripts/dummy-server.json "${ROOT_DIR}/instance/workspace/app-server/serv
 cp fvt-scripts/org.zowe.explorer-ip.json "${ROOT_DIR}/instance/workspace/app-server/plugins/org.zowe.explorer-ip.json"
 
 #pre-cleanup
+cd $TEST_DIR/fvt-scripts
 ./cleanup.sh $USERNAME
 
 #build zss
