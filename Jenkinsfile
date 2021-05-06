@@ -118,7 +118,7 @@ EOF"""
 mkdir ${serverWorkplace}
 mv ${serverWorkplaceRoot}/${tarFile} ${serverWorkplace}
 cd ${serverWorkplace}
-pax -rf ${tarFile}
+pax -r -x tar -f ${tarFile}
 cd testWorkspace
 chmod +x dataService/test/fvt-scripts/*.sh 
 chmod +x dataService/test/fvt-scripts/opercmd
