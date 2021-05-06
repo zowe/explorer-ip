@@ -115,12 +115,13 @@ node('zowe-jenkins-agent-dind') {
           --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content' '${localTestWorkspace}/ascii'"
 
       // make tar
-      sh "cd ${localTestWorkspace}"
-      sh "ls"
-      sh "tar -cf ${tarFileAscii} ascii"
-      sh "rm -rf ascii"
-      sh "tar -cf ${tarFile} content"
-      sh "rm -rf content"
+      sh "cd ${localTestWorkspace};\
+          tar -cf ${tarFileAscii} ascii;\
+          rm -rf ascii;\
+          tar -cf ${tarFile} content;\
+          rm -rf content;\
+          mv ${tarFile} ../${tarFile};\
+          mv ${tarFileAscii} ../${tarFileAscii}"
 
       echo "Now prepare to upload to zOS and run prepare script"
 
