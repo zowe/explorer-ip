@@ -14,13 +14,15 @@ cd $TEST_DIR
 cp fvt-scripts/dummy-server.json "${ROOT_DIR}/instance/workspace/app-server/serverConfig/server.json"
 cp fvt-scripts/org.zowe.explorer-ip.json "${ROOT_DIR}/instance/workspace/app-server/plugins/org.zowe.explorer-ip.json"
 
+#correct tagging
+chtag -tc IBM-1047 $TEST_DIR/fvt-scripts
+chtag -Rtc ISO8859-1 $ZSS_DIR
+
 #pre-cleanup
 cd $TEST_DIR/fvt-scripts
-chtag -tc IBM-1047 *
 ./cleanup.sh $USERNAME
 
 #build zss
-chtag -Rtc ISO8859-1 $ZSS_DIR
 cd $ZSS_DIR/build && ./build.sh 
 
 #start zis
