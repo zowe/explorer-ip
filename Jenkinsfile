@@ -112,12 +112,11 @@ node('zowe-jenkins-agent-dind') {
       // copy ascii files to ascii
       sh "rsync -rv --include '*.json' --include '*.html' --include '*.jcl' --include '*.template' --include '*.so' \
           --exclude '*.zip' --exclude '*.png' --exclude '*.tgz' --exclude '*.tar.gz' --exclude '*.pax' \
-          --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content' '${localTestWorkspace}/ascii'"
+          --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content/' '${localTestWorkspace}/ascii'"
       
-      sh "ls -lra ${localTestWorkspace}/ascii"
       // make tar
       sh "cd ${localTestWorkspace};\
-          tar -cvf ${tarFileAscii} ascii;\
+          tar -cf ${tarFileAscii} ascii;\
           rm -rf ascii;\
           tar -cf ${tarFile} content;\
           rm -rf content;\
