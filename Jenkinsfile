@@ -120,7 +120,8 @@ mv ${serverWorkplaceRoot}/${tarFile} ${serverWorkplace}
 cd ${serverWorkplace}
 pax -rf ${tarFile}
 cd testWorkspace
-chmod +x dataService/test/fvt-scripts/*.sh opercmd
+chmod +x dataService/test/fvt-scripts/*.sh 
+chmod +x opercmd
 . dataService/test/fvt-scripts/prepare-fvt.sh ${SSH_USER}
 sleep 60
 exit 0
