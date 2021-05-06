@@ -144,7 +144,6 @@ pax -r -x tar -o to=IBM-1047 -f ${tarFileAscii}
 rm ${tarFile}
 rm ${tarFileAscii}
 cp -R ascii/. content
-rm -rf ascii
 cd content
 chmod +x dataService/test/fvt-scripts/*.sh 
 chmod +x dataService/test/fvt-scripts/opercmd
