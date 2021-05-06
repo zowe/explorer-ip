@@ -29,8 +29,6 @@ cd $ZSS_DIR/build && ./build.sh
 cd $TEST_DIR/fvt-scripts
 ./zis-start.sh $USERNAME ${ZSS_DIR} ${TEST_DIR}/fvt-scripts
 
-exit #hardstop here
-
 # start zss
 cd $ZSS_DIR/bin
 chmod 640 ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
