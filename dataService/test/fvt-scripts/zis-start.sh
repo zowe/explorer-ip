@@ -4,7 +4,7 @@ FVT_DIR=$3
 
 # parsing volume of LOADLIB
 # Reference: https://github.com/zowe/zowe-install-packaging/blob/master/shared/scripts/check-dataset-exist.sh
-VOLUME= $(tsocmd "LISTDS '${USERNAME}.DEV.LOADLIB'" | awk '/^--VOLUMES/{f=1;next} f{f=0;$1=$1;print}')
+VOLUME=$(tsocmd "LISTDS '${USERNAME}.DEV.LOADLIB'" | awk '/^--VOLUMES/{f=1;next} f{f=0;$1=$1;print}')
 
 # create ZWESIS01 JCL and its override
 tsocmd 'alloc da(dev.jcl) DSORG(PO) RECFM(F,B) LRECL(80) DSNTYPE(LIBRARY) BLKSIZE(0) CYLINDERS SPACE(1,1)'

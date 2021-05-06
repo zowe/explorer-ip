@@ -5,11 +5,14 @@ DS_LOADLIB=${USERNAME}.DEV.LOADLIB
 
 function cleanup_dataset {
     DS=$1
-    if [[ $(tsocmd "LISTDS '$DS'") ]]; 
+    tsocmd "LISTDS '$DS'" > /dev/null 2>&1    #suppress stdout&stderr
+    rc=$?
+    if [[ $rc == 0 ]]; 
     then
         echo "$DS exists, delete it now..."
         tsocmd "DELETE '$DS'"
     else
+        echo "$DS not exist, skip cleanup dataset"
     fi
 }
 
@@ -18,5 +21,5 @@ cleanup_dataset $DS_PARMLIB
 cleanup_dataset $DS_LOADLIB
 
 # purge active jobs if exists
-tsocmd "P O OUTPUT(ZWESISTT)"
+opercmd "P O OUTPUT(ZWESISTT)"
 exit 0

@@ -16,6 +16,7 @@ cp fvt-scripts/org.zowe.explorer-ip.json "${ROOT_DIR}/instance/workspace/app-ser
 
 #pre-cleanup
 cd $TEST_DIR/fvt-scripts
+chtag -tc IBM-1047 *
 ./cleanup.sh $USERNAME
 
 #build zss
