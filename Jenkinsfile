@@ -116,6 +116,7 @@ node('zowe-jenkins-agent-dind') {
 
       // make tar
       sh "cd ${localTestWorkspace}"
+      sh "ls"
       sh "tar -cf ${tarFileAscii} ascii"
       sh "rm -rf ascii"
       sh "tar -cf ${tarFile} content"
