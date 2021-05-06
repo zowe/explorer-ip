@@ -24,6 +24,7 @@ cd $ZSS_DIR/build && ./build.sh
 
 #start zis
 cd $TEST_DIR/fvt-scripts
+chmod +x zis-start.sh
 ./zis-start.sh $USERNAME ${ZSS_DIR} ${TEST_DIR}
 
 exit #hardstop here
