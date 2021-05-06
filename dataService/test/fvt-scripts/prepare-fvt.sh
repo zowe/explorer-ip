@@ -15,8 +15,8 @@ cp fvt-scripts/dummy-server.json "${ROOT_DIR}/instance/workspace/app-server/serv
 cp fvt-scripts/org.zowe.explorer-ip.json "${ROOT_DIR}/instance/workspace/app-server/plugins/org.zowe.explorer-ip.json"
 
 #correct tagging
-chtag -Rtc IBM-1047 $TEST_DIR/fvt-scripts
-chtag -Rtc ISO8859-1 $ZSS_DIR
+#chtag -Rtc IBM-1047 $TEST_DIR/fvt-scripts
+#chtag -Rtc ISO8859-1 $ZSS_DIR
 
 #pre-cleanup
 cd $TEST_DIR/fvt-scripts

@@ -85,7 +85,9 @@ node('zowe-jenkins-agent-dind') {
 
       // then init some variables
       def tarFile = "exp-ip-test.tar"
+      def tarFileAscii = "ascii.tar"
       def serverWorkplaceRoot = "/ZOWE/tmp"
+      def localTestWorkspace = "testWorkspace"
       def branch = env.BRANCH_NAME
       if (branch.startsWith('origin/')) {
         branch = branch.substring(7)
@@ -96,15 +98,28 @@ node('zowe-jenkins-agent-dind') {
       def serverWorkplace = "${serverWorkplaceRoot}/${processUid}"
 
       // untar required files
-      sh "mkdir testWorkspace"
-      sh "tar -C testWorkspace -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
+      sh "mkdir ${localTestWorkspace}/content"
+      sh "tar -C ${localTestWorkspace}/content -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
 
       // clean up zss folder then copy into dataService
       sh "rm -rf zss/.git*"
-      sh "cp -r zss testWorkspace"
+      sh "cp -r zss ${localTestWorkspace}/content"
 
-      sh "tar -cf ${tarFile} testWorkspace"
-      echo "now prepare to upload to zOS and run prepare script"
+      // make ascii folder to deal with encoding
+      sh "rm -fr ${localTestWorkspace}/ascii"
+      sh "mkdir -p ${localTestWorkspace}/ascii"
+
+      sh "rsync -rv --include '*.json' --include '*.html' --include '*.jcl' --include '*.template' --include '*.so' \
+          --exclude '*.zip' --exclude '*.png' --exclude '*.tgz' --exclude '*.tar.gz' --exclude '*.pax' \
+          --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content/' '${localTestWorkspace}/ascii'"
+
+      sh "cd ${localTestWorkspace}"
+      sh "tar -cf ${tarFileAscii} ascii"
+      sh "rm -rf ascii"
+      sh "tar -cf ${tarFile} content"
+      sh "rm -rf content"
+
+      echo "Now prepare to upload to zOS and run prepare script"
 
       withCredentials(serverCredentials) {
         def failure
@@ -112,14 +127,21 @@ node('zowe-jenkins-agent-dind') {
           // send the tar to server
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e sftp -o BatchMode=no -o StrictHostKeyChecking=no -P ${SSH_PORT} -b - ${SSH_USER}@${SSH_HOST} << EOF
 put ${tarFile} ${serverWorkplaceRoot}
+put ${tarFileAscii} ${serverWorkplaceRoot}
 EOF"""
 
           sh """SSHPASS=${SSH_PASSWORD} sshpass -e ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} << EOF
 mkdir ${serverWorkplace}
 mv ${serverWorkplaceRoot}/${tarFile} ${serverWorkplace}
+mv ${serverWorkplaceRoot}/${tarFileAscii} ${serverWorkplace}
 cd ${serverWorkplace}
 pax -r -x tar -f ${tarFile}
-cd testWorkspace
+pax -r -x tar -o to=IBM-1047 -f ${tarFileAscii}
+rm ${tarFile}
+rm ${tarFileAscii}
+cp -R ascii/. content
+rm -rf ascii
+cd content
 chmod +x dataService/test/fvt-scripts/*.sh 
 chmod +x dataService/test/fvt-scripts/opercmd
 . dataService/test/fvt-scripts/prepare-fvt.sh ${SSH_USER}
