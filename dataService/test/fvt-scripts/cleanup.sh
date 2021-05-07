@@ -1,5 +1,5 @@
 # cancel active jobs if exists, then purge output
-opercmd '\$C JOB(ZWESISTT),P'
+opercmd '$C JOB(ZWESISTT),P'
 
 # pre clean up datasets
 USERNAME=$1
