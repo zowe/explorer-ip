@@ -8,12 +8,12 @@ export INSTANCE_DIR=${SCRIPT_DIR}/instance
 # prepare instance directory
 mkdir -p "${INSTANCE_DIR}/workspace/app-server/serverConfig"
 mkdir -p "${INSTANCE_DIR}/workspace/app-server/plugins"
-cd $TEST_DIR
-cp fvt-scripts/dummy-server.json "${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json"
-cp fvt-scripts/org.zowe.explorer-ip.json "${INSTANCE_DIR}/workspace/app-server/plugins/org.zowe.explorer-ip.json"
+cd $TEST_DIR/fvt-scripts
+cp dummy-server.json "${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json"
+cp org.zowe.explorer-ip.json "${INSTANCE_DIR}/workspace/app-server/plugins/org.zowe.explorer-ip.json"
 
 #pre-cleanup
-cd $TEST_DIR/fvt-scripts && ./cleanup.sh $USERNAME
+./cleanup.sh $USERNAME
 
 #build zss
 cd $ZSS_DIR/build && ./build.sh 
