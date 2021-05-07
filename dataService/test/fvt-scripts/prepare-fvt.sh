@@ -31,7 +31,7 @@ cd $TEST_DIR/fvt-scripts
 
 # start zss
 cd $ZSS_DIR/bin
-chmod 640 ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
+chmod -R 640 ${INSTANCE_DIR}/workspace/app-server/serverConfig
 ./zssServer ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
 
 # opercmd 'd parmlib'
