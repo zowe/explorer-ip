@@ -24,7 +24,7 @@ cd $TEST_DIR/fvt-scripts && ./zis-start.sh $USERNAME ${ZSS_DIR} ${TEST_DIR}/fvt-
 # start zss
 cd $ZSS_DIR/bin
 chmod -R 640 ${INSTANCE_DIR}/workspace/app-server/serverConfig
-#./zssServer ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
+./zssServer ${INSTANCE_DIR}/workspace/app-server/serverConfig/server.json
 
 # opercmd 'd parmlib'
 # PPT PGMNAME(ZWESIS01) KEY(4) NOSWAP
