@@ -2,9 +2,12 @@
   "devDependencies": {
     "axios": "^0.21.0",
     "chai": "^4.1.2",
-    "mocha": "^7.2.0"
+    "cross-env": "^7.0.3",
+    "mocha": "^7.2.0",
+    "mocha-jenkins-reporter": "^0.4.5"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test:fvt": "cross-env JUNIT_REPORT_PATH=target/report-fvt.xml mocha --timeout 999999 --recursive --colors --reporter mocha-jenkins-reporter"
   }
 }
