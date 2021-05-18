@@ -67,15 +67,65 @@ node('zowe-jenkins-agent-dind') {
     ],
     allowPublishWithoutTest: true // There are no tests
   )
-
+/*
   pipeline.createStage(
-    name          : 'Test',
-    timeout       : [ time: 30, unit: 'MINUTES' ],
-    stage         : {
-                    },
-    junit         : "target/*.xml",
+    name              : "Test",
+    timeout: [time: 2, unit: 'HOURS'],
+    isSkippable: true,
+    stage : {
+      // download full zowe from latest staging branch
+      def buildName = "zowe-install-packaging :: staging"
+      def branchName = "staging"
+
+      def ZOWE_BUILD_REPOSITORY = 'libs-snapshot-local'
+      def ZOWE_CLI_BUILD_REPOSITORY = 'libs-snapshot-local'
+      def ZOWE_CLI_BUILD_NAME = 'Zowe CLI Bundle :: master'
+      
+      sourceRegBuildInfo = pipeline.artifactory.getArtifact([
+        'pattern'      : "${ZOWE_BUILD_REPOSITORY}/*/zowe-*.pax",
+        'build-name'   : buildName,
+        'build-number' : env.BUILD_NUMBER
+      ])
+      cliSourceBuildInfo = pipeline.artifactory.getArtifact([
+          'pattern'      : "${ZOWE_CLI_BUILD_REPOSITORY}/*/zowe-cli-package-*.zip",
+          'build-name'   : ZOWE_CLI_BUILD_NAME
+      ])
+      if (sourceRegBuildInfo && sourceRegBuildInfo.path) { //run tests when sourceRegBuildInfo exists
+        def testParameters = [
+          booleanParam(name: 'STARTED_BY_AUTOMATION', value: true),
+          string(name: 'TEST_SERVER', value: 'marist'),
+          string(name: 'TEST_SCOPE', value: '?????????????????'),
+          string(name: '?????????????????', value: '?????????????????'),
+          string(name: 'ZOWE_ARTIFACTORY_PATTERN', value: sourceRegBuildInfo.path),
+          string(name: 'ZOWE_ARTIFACTORY_BUILD', value: buildName),
+          string(name: 'INSTALL_TEST_DEBUG_INFORMATION', value: 'zowe-install-test:*'),
+          string(name: 'SANITY_TEST_DEBUG_INFORMATION', value: 'zowe-sanity-test:*'),
+          booleanParam(name: 'Skip Stage: Lint', value: true),
+          booleanParam(name: 'Skip Stage: Audit', value: true),
+          booleanParam(name: 'Skip Stage: SonarQube Scan', value: true)
+        ]
+        if (cliSourceBuildInfo && cliSourceBuildInfo.path) {
+          testParameters.add(string(name: 'ZOWE_CLI_ARTIFACTORY_PATTERN', value: cliSourceBuildInfo.path))
+          testParameters.add(string(name: 'ZOWE_CLI_ARTIFACTORY_BUILD', value: ''))
+        }
+
+        def test_result = build(
+          job: '/zowe-install-test/' + branchName.replace('/', '%2F'),
+          parameters: testParameters
+        )
+        echo "Test result: ${test_result.result}"
+        if (test_result.result != 'SUCCESS') {
+          currentBuild.result='UNSTABLE'
+          if (test_result.result == 'ABORTED') {
+            echo "Test aborted"
+          } else {
+            echo "Test failed on ????????????????? ${sourceRegBuildInfo.path}, check failure details at ${test_result.absoluteUrl}"
+          }
+        }
+      }
+    }
   )
-  
+*/
   // define we need release stage
   pipeline.release(
     baseDirectory:'WEB_CLIENT',
