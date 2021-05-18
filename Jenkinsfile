@@ -55,145 +55,6 @@ node('zowe-jenkins-agent-dind') {
   // we have pax packaging step
   pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
 
-//   pipeline.createStage(
-//     name          : 'Test',
-//     timeout       : [ time: 30, unit: 'MINUTES' ],
-//     stage         : {
-//       // first define test server credentials
-//       def serverCredentials = []
-//       Map TEST_SERVERS = [
-//         'marist': [
-//           ansible_host     : 'marist-1',
-//           ssh_hostport     : 'ssh-marist-server-zzow01-hostport',
-//           ssh_userpass     : 'ssh-marist-server-zzow01'
-//         ]
-//       ];
-      
-//       TEST_SERVERS.each{ key, host ->
-//         serverCredentials.add(usernamePassword(
-//           credentialsId: host['ssh_hostport'],
-//           passwordVariable: "SSH_PORT".toString(),
-//           usernameVariable: "SSH_HOST".toString()
-//         ))
-//         serverCredentials.add(usernamePassword(
-//           credentialsId: host['ssh_userpass'],
-//           passwordVariable: "SSH_PASSWORD".toString(),
-//           usernameVariable: "SSH_USER".toString()
-//         ))
-//       }
-
-//       // then init some variables
-//       def tarFile = "exp-ip-test.tar"
-//       def tarFileAscii = "ascii.tar"
-//       def serverWorkplaceRoot = "/ZOWE/tmp"
-//       def localTestWorkspace = "testWorkspace"
-//       def branch = env.BRANCH_NAME
-//       if (branch.startsWith('origin/')) {
-//         branch = branch.substring(7)
-//       }
-//       branch = branch.replaceAll(/[^a-zA-Z0-9]/, '-').replaceAll(/[\-]+/, '-').toLowerCase()
-//       def timestamp = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
-//       def processUid = "explorer-ip-test-${branch}-${timestamp}"
-//       def serverWorkplace = "${serverWorkplaceRoot}/${processUid}"
-
-//       // prep
-//       sh "rm -fr ${localTestWorkspace}"
-//       sh "mkdir -p ${localTestWorkspace}/content"
-//       sh "mkdir -p ${localTestWorkspace}/ascii"
-      
-//       // untar required files
-//       sh "tar -C ${localTestWorkspace}/content -xf .pax/explorer-ip.tar dataService lib pluginDefinition.json"
-
-//       // clean up zss folder then copy into content
-//       sh "rm -rf zss/.git*"
-//       sh "cp -r zss ${localTestWorkspace}/content"
-
-//       // copy zss ascii files to ascii
-//       sh "rsync -rv --include '*.json' --include '*.html' --include '*.jcl' --include '*.template' --include '*.so' \
-//           --exclude '*.zip' --exclude '*.png' --exclude '*.tgz' --exclude '*.tar.gz' --exclude '*.pax' \
-//           --prune-empty-dirs --remove-source-files '${localTestWorkspace}/content/zss' '${localTestWorkspace}/ascii'"
-      
-//       // make tar
-//       sh "cd ${localTestWorkspace};\
-//           tar -cf ${tarFileAscii} ascii;\
-//           rm -rf ascii;\
-//           tar -cf ${tarFile} content;\
-//           rm -rf content;\
-//           mv ${tarFile} ../${tarFile};\
-//           mv ${tarFileAscii} ../${tarFileAscii}"
-
-//       echo "Now prepare to upload to zOS and run prepare script"
-
-//       withCredentials(serverCredentials) {
-//         def failure
-//         try {
-//           // send the tar to server
-//           sh """SSHPASS=${SSH_PASSWORD} sshpass -e sftp -o BatchMode=no -o StrictHostKeyChecking=no -P ${SSH_PORT} -b - ${SSH_USER}@${SSH_HOST} << EOF
-// put ${tarFile} ${serverWorkplaceRoot}
-// put ${tarFileAscii} ${serverWorkplaceRoot}
-// EOF"""
-
-//           sh """SSHPASS=${SSH_PASSWORD} sshpass -e ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} << EOF
-// mkdir ${serverWorkplace}
-// mv ${serverWorkplaceRoot}/${tarFile} ${serverWorkplace}
-// mv ${serverWorkplaceRoot}/${tarFileAscii} ${serverWorkplace}
-// cd ${serverWorkplace}
-// pax -r -x tar -f ${tarFile}
-// pax -r -x tar -o to=IBM-1047 -f ${tarFileAscii}
-// rm ${tarFile}
-// rm ${tarFileAscii}
-// cp -R ascii/. content
-// rm -r ascii
-// cd content
-// chmod +x dataService/test/fvt-scripts/*.sh 
-// chmod +x dataService/test/fvt-scripts/opercmd
-// . dataService/test/fvt-scripts/prepare-fvt.sh ${SSH_USER}
-// sleep 60
-// exit 0
-// EOF"""
-//         }
-//         catch (ex1) {
-//           throw ex1
-//         }
-//       }
-
-//       echo "Preparing server for integration test ..."
-      
-//       error //hardstop here
-
-      
-
-//       echo "Starting integration test ..."
-//       try {
-//         withCredentials([
-//           usernamePassword(
-//             credentialsId: params.FVT_ZOSMF_CREDENTIAL,
-//             passwordVariable: 'PASSWORD',
-//             usernameVariable: 'USERNAME'
-//           )
-//         ]) 
-//         {
-//           ansiColor('xterm') {
-//             sh """
-//             ZSS_HOST=${USERNAME}
-//             ZOWE_USERNAME=${USERNAME} \
-//             ZOWE_PASSWORD=${PASSWORD} \
-//             npm run install
-//             npm run test:fvt
-//             """
-//           }
-//         }
-//       } catch (e) {
-//         echo "Error with integration test: ${e}"
-//         throw e
-//       } finally {
-//         // show logs (the folder should match the folder defined in prepare-fvt.sh)
-//         sh "find ../dataService/test/target -type f | xargs -i sh -c 'echo \">>>>>>>>>>>>>>>>>>>>>>>> {} >>>>>>>>>>>>>>>>>>>>>>>\" && cat {}'"
-//       }
-//     },
-//     junit         : "target/*.xml",
-//   )
-
   // define we need publish stage
   pipeline.publish(
     operation: {
@@ -205,6 +66,14 @@ node('zowe-jenkins-agent-dind') {
       '.pax/explorer-ip.tar'
     ],
     allowPublishWithoutTest: true // There are no tests
+  )
+
+  pipeline.createStage(
+    name          : 'Test',
+    timeout       : [ time: 30, unit: 'MINUTES' ],
+    stage         : {
+                    },
+    junit         : "target/*.xml",
   )
   
   // define we need release stage

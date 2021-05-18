@@ -103,6 +103,9 @@ git clone --recursive https://github.com/zowe/zss/   # this line also downloads 
 rm -rf zss/.git*
 cp -r zss dataService/build
 
+# remove test files - tests should not be shipped
+rm -rf dataService/test
+
 # copy dataService source to PAX workspace
 echo "[${SCRIPT_NAME}] copying dataService source to PAX workspace"
 mkdir -p "${PAX_WORKSPACE_DIR}/content/dataService"
