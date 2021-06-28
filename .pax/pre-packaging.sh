@@ -17,23 +17,27 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 #content tagging of web folder if not already
 echo "[${SCRIPT_NAME}] tagging web folder as content"
-cd ./content/
+cd content
 chtag -Rtc ISO8859-1 web
-chtag -b web/assets/icon.png
+cd web/assets
+chtag -b icon.png
 
 # build dataService
 echo "[${SCRIPT_NAME}] building dataService"
-cd dataService/build
+cd "${SCRIPT_DIR}"/content/dataService/build
 ./build.sh
 echo "[${SCRIPT_NAME}] successfully built dataService"
 
 # cleanup before tar
-rm -rf zss
+# rm -rf zss
+
+# cleanup source & build assets
+cd "${SCRIPT_DIR}"/content
+rm -rf dataService
+rm -rf webClient
 
 # create tar
 echo "[${SCRIPT_NAME}] creating tar"
-cd "$SCRIPT_DIR"
-cd content
 tar -cf ../explorer-ip.tar *
 cd ..
 echo "[${SCRIPT_NAME}] explorer-ip.tar is generated"
