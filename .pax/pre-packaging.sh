@@ -18,7 +18,7 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 #content tagging of web folder if not already
 echo "[${SCRIPT_NAME}] tagging web folder as content"
 cd content
-chtag -Rtc ISO8859-1 web
+chtag -Rtc IBM-1047 web
 cd web/assets
 chtag -b icon.png
 
