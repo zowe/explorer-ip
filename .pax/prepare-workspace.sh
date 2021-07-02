@@ -39,8 +39,6 @@ mkdir -p "${PAX_WORKSPACE_DIR}/content"
 
 # prepare content folder
 echo "[${SCRIPT_NAME}] copying explorer-ip root files to PAX workspace"
-mkdir -p "${PAX_WORKSPACE_DIR}/content/bin"
-cp -r bin "${PAX_WORKSPACE_DIR}/content"
 cp  pluginDefinition.json "${PAX_WORKSPACE_DIR}/content"
 cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
 cp  README.md "${PAX_WORKSPACE_DIR}/content"
