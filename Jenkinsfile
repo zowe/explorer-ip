@@ -53,7 +53,7 @@ node('zowe-jenkins-agent-dind') {
   )
 
   // we have pax packaging step
-  pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'])
+  pipeline.packaging(name: 'explorer-ip', baseDirectory:'.', extraFiles:['explorer-ip.tar'], paxOptions: '-x os390 -pp')
 
   // define we need publish stage
   pipeline.publish(
