@@ -87,7 +87,7 @@ jobs:
         uses: zowe-actions/shared-actions/publish@main
         if: success()
         with:
-          artifacts: 
+          artifacts: |
             .pax/explorer-ip.pax
             .pax/explorer-ip.tar
           perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
