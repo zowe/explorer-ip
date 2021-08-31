@@ -19,13 +19,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.DEFAULT_NODE_VERSION }}
+          node-version: 10.24.1
 
       - name: Install
         run: npm install --no-audit
+        working-directory: webClient
 
       - name: Audit
         run: npm audit --prod
+        working-directory: webClient
 
   run-lint:
     runs-on: macos-latest
@@ -39,13 +41,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.DEFAULT_NODE_VERSION }}
+          node-version: 10.24.1
 
       - name: Install
         run: npm install --no-audit
+        working-directory: webClient
 
       - name: Lint
         run: npm run lint
+        working-directory: webClient
 
   run-code-ql:
     runs-on: macos-latest
