@@ -62,7 +62,7 @@ jobs:
           node-version: 10.24.1
 
       - name: '[Setup] NodeJS project setup'
-        uses: zowe-actions/nodejs-actions/setup@add-work-directory-setup
+        uses: zowe-actions/nodejs-actions/setup@main
         with:
           package-name: 'org.zowe.explorer-ip'
           working-directory: 'webClient'
