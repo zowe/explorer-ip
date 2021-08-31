@@ -75,13 +75,15 @@ jobs:
           publish-registry-password: ${{ secrets.NPM_PRIVATE_REGISTRY_PASSWORD }}
 
 
-      # - name: '[Packaging] Make pax'
-      #   uses: zowe-actions/shared-actions/make-pax@main
-      #   with:
-      #     pax-name: 'explorer-mvs'
-      #     pax-options: '-o saveext'
-      #     pax-ssh-username: ${{ secrets.SSH_MARIST_USERNAME }}
-      #     pax-ssh-password: ${{ secrets.SSH_MARIST_PASSWORD }}
+      - name: '[Packaging] Make pax'
+        uses: zowe-actions/shared-actions/make-pax@main
+        with:
+          pax-name: 'explorer-ip'
+          pax-options: '-x os390 -pp'
+          pax-ssh-username: ${{ secrets.SSH_MARIST_USERNAME }}
+          pax-ssh-password: ${{ secrets.SSH_MARIST_PASSWORD }}
+          extra-files: 'explorer-ip.tar'
+
 
       # - name: '[Publish] Publish'
       #   uses: zowe-actions/shared-actions/publish@main
