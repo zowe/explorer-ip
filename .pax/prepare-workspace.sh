@@ -15,7 +15,7 @@
 # 
 # - build client
 #################################################################################
-# no longer need the following is using github actions
+# no longer need the following as we are now using github actions
 # set +x
 # . /home/jenkins/.nvm/nvm.sh
 # nvm use v10.24.1
