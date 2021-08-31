@@ -26,25 +26,6 @@ jobs:
         run: npm audit --prod
         working-directory: webClient
 
-  run-lint:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 10.24.1
-
-      - name: Install
-        run: npm install --no-audit
-        working-directory: webClient
-
-      - name: Lint
-        run: npm run lint
-        working-directory: webClient
-
   run-code-ql:
     runs-on: macos-latest
     timeout-minutes: 20
