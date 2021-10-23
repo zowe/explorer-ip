@@ -114,7 +114,6 @@ mv webClient/tsconfig.backup.json webClient/tsconfig.json
 cp -r webClient "${BASE_DIR}/${WORK_DIR}"
 cp README.md "${BASE_DIR}/${WORK_DIR}"
 cp LICENSE "${BASE_DIR}/${WORK_DIR}"
-cp CHANGELOG.md "${BASE_DIR}/${WORK_DIR}"
 cp pluginDefinition.json "${BASE_DIR}/${WORK_DIR}"
 
 ###############################
