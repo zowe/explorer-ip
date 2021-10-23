@@ -1,13 +1,16 @@
 name: Build ompzowe/explorer-ip
 on:
   # push:
+  push:
+    branches:
+      - feature/test-gitHubAction  
   # pull_request:
-  workflow_dispatch:
-    inputs:
-      release:
-        description: 'Set to "true" if we want to release the images - test commit'
-        required: false
-        default: ''
+  #workflow_dispatch:
+  #  inputs:
+  #    release:
+  #      description: 'Set to "true" if we want to release the images - test commit'
+  #      required: false
+  #      default: ''
 env:
   IMAGE_BASE_DIR: container
 
