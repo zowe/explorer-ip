@@ -103,9 +103,6 @@ cd ${REPO_ROOT_DIR} #reset current directory back to explorer-ip root
 # copy web to PAX workspace
 mkdir -p "${BASE_DIR}/${WORK_DIR}/web"
 cp -r web "${BASE_DIR}/${WORK_DIR}"
-mkdir -p "${BASE_DIR}/${WORK_DIR}/bin"
-cp bin/start.sh "${BASE_DIR}/${WORK_DIR}/bin"
-chmod +x "${BASE_DIR}/${WORK_DIR}/bin/start.sh"
 # copy webClient source to PAX workspace
 ## remove node_modules to provide source only
 rm -rf webClient/node_modules

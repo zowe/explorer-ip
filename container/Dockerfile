@@ -32,6 +32,3 @@ WORKDIR /component
 COPY --chown=zowe:zowe component .
 COPY --chown=zowe:zowe component/LICENSE /licenses
 
-##################################
-# start command
-ENTRYPOINT [ "bin/start.sh" ]
