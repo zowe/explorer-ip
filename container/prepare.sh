@@ -54,7 +54,7 @@ JFROG_URL=https://zowe.jfrog.io/zowe/
 ###############################
 echo ">>>>> prepare basic files"
 cd "${REPO_ROOT_DIR}"
-package_version=$(jq -r '.version' package.json)
+package_version=$(jq -r '.version' webClient/package.json)
 package_release=$(echo "${package_version}" | awk -F. '{print $1;}')
 
 ###############################
