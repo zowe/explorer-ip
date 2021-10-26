@@ -17,7 +17,7 @@ FROM zowe-docker-release.jfrog.io/ompzowe/base-node:${ZOWE_BASE_IMAGE} AS builde
 ##################################
 # labels
 LABEL name="IP Explorer" \
-      maintainer=" " \
+      maintainer="Web UI Squad" \
       vendor="Zowe" \
       version="0.0.0" \
       release="0" \
