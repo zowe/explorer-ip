@@ -18,7 +18,7 @@
 # - cpu-arch
 
 ################################################################################
-# This script prepares all required files we plan to put into zowe-launch-scripts
+# This script prepares all required files we plan to put into explorer-ip
 # image.
 #
 # Prereqs:
@@ -44,7 +44,6 @@ fi
 
 ################################################################################
 # CONSTANTS
-# this should be containers/zowe-launch-scripts
 BASE_DIR=$(cd $(dirname $0);pwd)
 REPO_ROOT_DIR=$(cd $(dirname $0)/../;pwd)
 WORK_DIR=tmp
@@ -100,10 +99,10 @@ cd ../.. #now back at zlux
 rm explorer-ip
 cd ${REPO_ROOT_DIR} #reset current directory back to explorer-ip root
 
-# copy web to PAX workspace
+# copy web to container workspace
 mkdir -p "${BASE_DIR}/${WORK_DIR}/web"
 cp -r web "${BASE_DIR}/${WORK_DIR}"
-# copy webClient source to PAX workspace
+# copy webClient source to container workspace
 ## remove node_modules to provide source only
 rm -rf webClient/node_modules
 mkdir -p "${BASE_DIR}/${WORK_DIR}/webClient"
@@ -114,16 +113,6 @@ cp LICENSE "${BASE_DIR}/${WORK_DIR}"
 cp pluginDefinition.json "${BASE_DIR}/${WORK_DIR}"
 
 ###############################
-echo ">>>>> prepare basic files"
-: 'cd "${REPO_ROOT_DIR}"
-cp README.md "${BASE_DIR}/${WORK_DIR}"
-cp LICENSE "${BASE_DIR}/${WORK_DIR}"
-cp CHANGELOG.md "${BASE_DIR}/${WORK_DIR}"
-cp pluginDefinition.json "${BASE_DIR}/${WORK_DIR}"
-cp -r WebContent "${BASE_DIR}/${WORK_DIR}"
-cp -r dataService "${BASE_DIR}/${WORK_DIR}"
-'
-###############################
 echo ">>>>> prepare manifest.json"
 cd "${REPO_ROOT_DIR}"
 if [ -n "${GITHUB_PR_ID}" ]; then
@@ -131,7 +120,6 @@ if [ -n "${GITHUB_PR_ID}" ]; then
 else
   GITHUB_BRANCH=${GITHUB_REF#refs/heads/}
 fi
-
 
 echo "    - branch: ${GITHUB_BRANCH}"
 echo "    - build number: ${GITHUB_RUN_NUMBER}"
@@ -144,7 +132,6 @@ cat manifest.yaml | \
       -e "s#{{build\.timestamp}}#$(date +%s)#" \
   > "${BASE_DIR}/${WORK_DIR}/manifest.yaml"
 
-#cat manifest.yaml > "${BASE_DIR}/${WORK_DIR}/manifest.yaml"
 ###############################
 # copy to target context
 echo ">>>>> copy to target build context"

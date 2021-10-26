@@ -8,7 +8,7 @@ on:
   #workflow_dispatch:
   #  inputs:
   #    release:
-  #      description: 'Set to "true" if we want to release the images - test commit'
+  #      description: 'Set to "true" if we want to release the images'
   #      required: false
   #      default: ''
 env:

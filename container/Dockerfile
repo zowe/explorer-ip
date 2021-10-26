@@ -21,8 +21,10 @@ LABEL name="IP Explorer" \
       vendor="Zowe" \
       version="0.0.0" \
       release="0" \
-      summary="IBM z/OS IP explorer service" 
+      summary="IBM z/OS IP explorer service" \ 
+      description="The Zowe Desktop application to monitor TCP/IP stack using the EZBNMIFR network management interface"
 
+##################################
 # switch context
 USER zowe
 WORKDIR /component
