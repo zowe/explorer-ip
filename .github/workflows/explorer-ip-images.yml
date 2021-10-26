@@ -1,16 +1,13 @@
 name: Build ompzowe/explorer-ip
 on:
-  # Temporary changes to test github action, Fix: comment 'push' and uncomment 'workflow_dispatch'
-  push:
-    branches:
-      - feature/IP-explorer-containerization  
+  #push:
   # pull_request:
-  #workflow_dispatch:
-  #  inputs:
-  #    release:
-  #      description: 'Set to "true" if we want to release the images'
-  #      required: false
-  #      default: ''
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Set to "true" if we want to release the images'
+        required: false
+        default: ''
 env:
   IMAGE_BASE_DIR: container
 
