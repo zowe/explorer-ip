@@ -50,7 +50,7 @@ jobs:
       #     JF_ARTIFACTORY_1: ${{ secrets.JF_ARTIFACTORY_TOKEN }}
           
       - name: '[Prep 4] Prepare workflow'
-        uses: zowe-actions/shared-actions/prepare-workflow@main
+        uses: zowe-actions/shared-actions/prepare-workflow@test
         with:
           github-user: ${{ github.actor }}
           github-password: ${{ secrets.GITHUB_TOKEN }}
