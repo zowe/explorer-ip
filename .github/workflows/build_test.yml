@@ -56,16 +56,16 @@ jobs:
           github-password: ${{ secrets.GITHUB_TOKEN }}
           github-email: 'dummy-email@email.com'
 
-      # - name: '[Prep 5] Setup Node'
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: 10.24.1
+      - name: '[Prep 5] Setup Node'
+        uses: actions/setup-node@v2
+        with:
+          node-version: 10.24.1
 
-      # - name: '[Setup] NodeJS project setup'
-      #   uses: zowe-actions/nodejs-actions/setup@main
-      #   with:
-      #     package-name: 'org.zowe.explorer-ip'
-      #     working-directory: 'webClient'
+      - name: '[Setup] NodeJS project setup'
+        uses: zowe-actions/nodejs-actions/setup@main
+        with:
+          package-name: 'org.zowe.explorer-ip'
+          working-directory: 'webClient'
 
       # - name: '[Packaging] Make pax'
       #   uses: zowe-actions/shared-actions/make-pax@main
