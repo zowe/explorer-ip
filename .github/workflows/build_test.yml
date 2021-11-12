@@ -76,14 +76,14 @@ jobs:
       #     pax-ssh-password: ${{ secrets.SSH_MARIST_RACF_PASSWORD }}
       #     extra-files: 'explorer-ip.tar'
 
-      # - name: '[Publish] Publish'
-      #   uses: zowe-actions/shared-actions/publish@main
-      #   if: success()
-      #   with:
-      #     artifacts: |
-      #       .pax/explorer-ip.pax
-      #       .pax/explorer-ip.tar
-      #     perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
+      - name: '[Publish] Publish'
+        uses: zowe-actions/shared-actions/publish@main
+        if: success()
+        with:
+          # artifacts: |
+          #   .pax/explorer-ip.pax
+          #   .pax/explorer-ip.tar
+          perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
 
       - name: '[Release 1] Release (if necessary)'
         # if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
