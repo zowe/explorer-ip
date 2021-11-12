@@ -53,7 +53,6 @@ jobs:
         uses: zowe-actions/shared-actions/prepare-workflow@test
         with:
           github-user: ${{ github.actor }}
-          github-password: ${{ secrets.GITHUB_TOKEN }}
           github-email: 'dummy-email@email.com'
 
       - name: '[Prep 5] Setup Node'
@@ -92,4 +91,8 @@ jobs:
 
       - name: '[Release 2] NPM bump version (if necessary)' 
         # if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' && env.IS_FORMAL_RELEASE_BRANCH == 'true' && env.PRE_RELEASE_STRING == ''}}
-        uses: zowe-actions/nodejs-actions/bump-version@main
+        uses: zowe-actions/nodejs-actions/bump-version@test
+        with:
+          base-directory: 'webClient'
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
