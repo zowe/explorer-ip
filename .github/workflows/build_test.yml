@@ -2,7 +2,7 @@ name: Build and Test Workflow
 on:
   push:
     branches:
-      - master
+      - master 
   pull_request:
     types: [opened, synchronize]
   workflow_dispatch:
@@ -50,7 +50,7 @@ jobs:
           JF_ARTIFACTORY_1: ${{ secrets.JF_ARTIFACTORY_TOKEN }}
           
       - name: '[Prep 4] Prepare workflow'
-        uses: zowe-actions/shared-actions/prepare-workflow@test
+        uses: zowe-actions/shared-actions/prepare-workflow@main
         with:
           github-user: ${{ github.actor }}
           github-email: 'dummy-email@email.com'
@@ -88,10 +88,9 @@ jobs:
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
         uses: zowe-actions/shared-actions/release@main
 
-
       - name: '[Release 2] NPM bump version (if necessary)' 
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' && env.IS_FORMAL_RELEASE_BRANCH == 'true' && env.PRE_RELEASE_STRING == ''}}
-        uses: zowe-actions/nodejs-actions/bump-version@test
+        uses: zowe-actions/nodejs-actions/bump-version@main
         with:
           base-directory: 'webClient'
         env: 
