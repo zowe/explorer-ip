@@ -12,11 +12,12 @@ WORK_DIR=$(cd $(dirname $0);pwd)
 mkdir ${WORK_DIR}/tmp 2>/dev/null
 cd ${WORK_DIR}/tmp
 
-ZSS=../zss
-ZOWECOMMON=${ZSS}/deps/zowe-common-c
+ZSS="../zss"
+ZOWECOMMON="${ZSS}/deps/zowe-common-c"
 TARGET="../../../lib/ipExplorer64.so"
-
-mkdir ../../../lib 2>/dev/null
+LIBDIR=$(dirname "${TARGET}")
+mkdir "${LIBDIR}" 2>/dev/null
+rm -f "${TARGET}"
 
 if ! c89 -D_OPEN_THREADS -D_XOPEN_SOURCE=600 -DAPF_AUTHORIZED=0 -DNOIBMHTTP \
 "-Wa,goff" "-Wc,lp64,langlvl(EXTC99),float(HEX),agg,expo,list(),so(),search(),\
@@ -26,10 +27,10 @@ goff,xref,gonum,roconst,gonum,asm,asmlib('SYS1.MACLIB'),asmlib('CEE.SCEEMAC'),dl
 ../../src/ipExplorerDataService.c \
 ../pluginAPI64.x 
 then
-  echo "build failed"
+  echo "ipExplorer64.so build failed"
   RC=8
 else
-  echo "build successful"
+  echo "ipExplorer64.so build successful"
   extattr +p "${TARGET}"
   RC=0
 fi
