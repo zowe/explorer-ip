@@ -8,10 +8,33 @@
 #
 #  Copyright Contributors to the Zowe Project.
 ################################################################################
-set -e
+WORK_DIR=$(cd $(dirname $0);pwd)
+mkdir ${WORK_DIR}/tmp 2>/dev/null
+cd ${WORK_DIR}/tmp
 
-./build31.sh
-./build64.sh
+ZSS=../zss
+ZOWECOMMON=${ZSS}/deps/zowe-common-c
+TARGET="../../../lib/ipExplorer31.so"
+
+mkdir ../../../lib 2>/dev/null
+
+if ! c89 -D_OPEN_THREADS -D_XOPEN_SOURCE=600 -DAPF_AUTHORIZED=0 -DNOIBMHTTP \
+"-Wa,goff" "-Wc,langlvl(EXTC99),float(HEX),agg,expo,list(),so(),search(),\
+goff,xref,gonum,roconst,gonum,asm,asmlib('SYS1.MACLIB'),asmlib('CEE.SCEEMAC'),dll" -Wl,dll \
+-I ${ZSS}/h -I ${ZOWECOMMON}/h \
+-o "${TARGET}" \
+../../src/ipExplorerDataService.c \
+../pluginAPI31.x 
+then
+  echo "build failed"
+  RC=8
+else
+  echo "build successful"
+  extattr +p "${TARGET}"
+  RC=0
+fi
+
+exit $RC
 ################################################################################
 #  This program and the accompanying materials are
 #  made available under the terms of the Eclipse Public License v2.0 which accompanies

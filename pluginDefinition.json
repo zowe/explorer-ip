@@ -25,7 +25,8 @@
       "version": "1.0.0",
       "initializerLookupMethod": "external",
       "initializerName": "ipExplorerDataServiceInstaller",
-      "libraryName": "ipExplorer.so",
+      "libraryName31": "ipExplorer31.so",
+      "libraryName64": "ipExplorer64.so",
       "methods": ["GET"],
       "dependenciesIncluded": true
     }
