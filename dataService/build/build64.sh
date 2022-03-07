@@ -27,12 +27,12 @@ goff,xref,gonum,roconst,gonum,asm,asmlib('SYS1.MACLIB'),asmlib('CEE.SCEEMAC'),dl
 ../../src/ipExplorerDataService.c \
 ../pluginAPI64.x 
 then
-  RC=$?
   echo "ipExplorer64.so build failed"
+  RC=8
 else
-  RC=$?
   echo "ipExplorer64.so build successful"
   extattr +p "${TARGET}"
+  RC=0
 fi
 
 exit $RC
