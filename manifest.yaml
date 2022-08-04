@@ -1,15 +1,20 @@
 name: explorer-ip
 id: org.zowe.explorer-ip
+version: 1.0.1
 title: IP Explorer
 description: The Zowe Desktop application to monitor TCP/IP stack using the EZBNMIFR network management interface
+homepage: https://zowe.org
+keywords:
+  - zlux
+  - appfw
+  - app
+  - explorer
+  - network
 license: EPL-2.0
 repository:
   type: git
   url: https://github.com/zowe/explorer-ip.git
-build:
-  branch: "{{build.branch}}"
-  number: "{{build.number}}"
-  commitHash: "{{build.commitHash}}"
-  timestamp: "{{build.timestamp}}"
 appfwPlugins:
   - path: .
+schemas:
+  configs: schemas/trivial-schema.json
