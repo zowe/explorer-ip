@@ -1,6 +1,6 @@
 {  
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://abcdef.com/schemas/v2/explorer-ip",
+  "$id": "https://zowe.org/schemas/v2/explorer-ip",
   "allOf": [
     { "$ref": "https://zowe.org/schemas/v2/server-base" },
     { 

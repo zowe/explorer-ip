@@ -1,6 +1,6 @@
 # IP Explorer Changelog
 
-All notable changes to the sample angular app will be documented in this file.
+All notable changes to the IP Explorer app will be documented in this file.
 
 ## 1.0.1
 
