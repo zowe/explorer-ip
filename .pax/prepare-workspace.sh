@@ -42,6 +42,7 @@ mkdir -p "${PAX_WORKSPACE_DIR}/content"
 echo "[${SCRIPT_NAME}] copying explorer-ip root files to PAX workspace"
 cp  pluginDefinition.json "${PAX_WORKSPACE_DIR}/content"
 cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
+cp -r schemas "${PAX_WORKSPACE_DIR}/schemas"
 cp  README.md "${PAX_WORKSPACE_DIR}/content"
 cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 
