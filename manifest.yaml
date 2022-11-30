@@ -1,6 +1,6 @@
 name: explorer-ip
 id: org.zowe.explorer-ip
-version: 1.0.1
+version: 2.0.0
 title: IP Explorer
 description: The Zowe Desktop application to monitor TCP/IP stack using the EZBNMIFR network management interface
 homepage: https://zowe.org
