@@ -56,9 +56,9 @@ cd "${EXPLIP_ROOT_DIR}"
 rm -rf zlux
 mkdir zlux
 cd zlux
-git clone https://github.com/zowe/zlux-app-manager.git
-git clone https://github.com/zowe/zlux-platform.git
-git submodule foreach "git checkout master"
+git clone https://github.com/zowe/zlux-app-manager.git 
+git clone https://github.com/zowe/zlux-platform.git 
+git submodule foreach "git checkout v3.x/staging"
 cd zlux-app-manager/virtual-desktop && npm ci
 
 # build webClient
@@ -99,7 +99,7 @@ cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 
 # clone zss and copy to dataService (zss cannot be built on Unix)
 echo "[${SCRIPT_NAME}] clone zss and copy to dataService"
-git clone --recursive https://github.com/zowe/zss/   # this line also downloads zowe-common-c
+git clone --recursive https://github.com/zowe/zss/  -b v3.x/staging  # this line also downloads zowe-common-c
 rm -rf zss/.git*
 cp -r zss dataService/build
 
