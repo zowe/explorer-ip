@@ -56,9 +56,9 @@ cd "${EXPLIP_ROOT_DIR}"
 rm -rf zlux
 mkdir zlux
 cd zlux
-git clone https://github.com/zowe/zlux-app-manager.git -b v3.x/staging
-git clone https://github.com/zowe/zlux-platform.git -b v3.x/staging
-git submodule foreach "git checkout master"
+git clone https://github.com/zowe/zlux-app-manager.git 
+git clone https://github.com/zowe/zlux-platform.git 
+git submodule foreach "git checkout v3.x/staging"
 cd zlux-app-manager/virtual-desktop && npm ci
 
 # build webClient
