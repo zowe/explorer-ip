@@ -1,6 +1,6 @@
 {
   "identifier": "org.zowe.explorer-ip",
-  "apiVersion": "2.0.0",
+  "apiVersion": "3.0.0",
   "pluginVersion": "1.0.1",
   "pluginType": "application",
   "webContent": {
