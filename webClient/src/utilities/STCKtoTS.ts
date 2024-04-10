@@ -7,7 +7,7 @@
 
   Copyright Contributors to the Zowe Project.
 */
-import * as Long from 'long';
+import Long from 'long';
 
 const EPOCH_IN_STCK = "9048018124800000000" // a constant value that denotes Unix epoch time in STCK units
 
