@@ -18,7 +18,7 @@
 # no longer need the following as we are now using github actions
 # set +x
 # . /home/jenkins/.nvm/nvm.sh
-# nvm use v10.24.1
+# nvm use v16
 # set -x
 # constants
 SCRIPT_NAME=$(basename "$0")
@@ -58,7 +58,6 @@ mkdir zlux
 cd zlux
 git clone https://github.com/zowe/zlux-app-manager.git
 git clone https://github.com/zowe/zlux-platform.git
-git submodule foreach "git checkout master"
 cd zlux-app-manager/virtual-desktop && npm ci
 
 # build webClient
