@@ -18,7 +18,7 @@
 # no longer need the following as we are now using github actions
 # set +x
 # . /home/jenkins/.nvm/nvm.sh
-# nvm use v10.24.1
+# nvm use v16
 # set -x
 # constants
 SCRIPT_NAME=$(basename "$0")
@@ -42,7 +42,7 @@ mkdir -p "${PAX_WORKSPACE_DIR}/content"
 echo "[${SCRIPT_NAME}] copying explorer-ip root files to PAX workspace"
 cp  pluginDefinition.json "${PAX_WORKSPACE_DIR}/content"
 cp  manifest.yaml "${PAX_WORKSPACE_DIR}/content"
-cp -r schemas "${PAX_WORKSPACE_DIR}/schemas"
+cp -r schemas "${PAX_WORKSPACE_DIR}/content"
 cp  README.md "${PAX_WORKSPACE_DIR}/content"
 cp  LICENSE "${PAX_WORKSPACE_DIR}/content"
 
@@ -58,7 +58,6 @@ mkdir zlux
 cd zlux
 git clone https://github.com/zowe/zlux-app-manager.git
 git clone https://github.com/zowe/zlux-platform.git
-git submodule foreach "git checkout master"
 cd zlux-app-manager/virtual-desktop && npm ci
 
 # build webClient
