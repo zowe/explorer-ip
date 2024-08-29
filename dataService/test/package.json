@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "axios": "1.7.5",
-    "chai": "4.5.0",
+    "chai": "4.5.0", 
     "cross-env": "7.0.3",
     "mocha": "10.7.3",
     "mocha-jenkins-reporter": "0.4.8"
