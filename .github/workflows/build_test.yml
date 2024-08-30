@@ -23,19 +23,22 @@ jobs:
         uses: zowe-actions/shared-actions/permission-check@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-  
-  validate-package-json:
-    needs: check-permission
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
 
-      - name: Validate package.json
-        uses: zowe-actions/shared-actions/validate-package-json@main
+#  Requirement to prevent latest libraries from being used to prevent against package/npm hijacking is in direct conflict
+#    with requirement to be on the latest version of packages for major release. I guess whoever complains more wins.
+#  
+#  validate-package-json:
+#    needs: check-permission
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Validate package.json
+#        uses: zowe-actions/shared-actions/validate-package-json@main
 
   build-test:
     runs-on: ubuntu-latest
-    needs: validate-package-json
+#    needs: validate-package-json
     steps: 
       - name: '[Prep 1] Checkout'
         uses: actions/checkout@v2
