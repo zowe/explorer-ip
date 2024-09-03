@@ -31,8 +31,6 @@ jobs:
           cpu-arch: amd64
 
       - uses: zowe-actions/shared-actions/docker-build-local@main
-        with:
-          build-arg-list: ZOWE_BASE_IMAGE=latest-ubuntu
         timeout-minutes: 5
 
   build-ubuntu-s390x:
@@ -58,7 +56,6 @@ jobs:
           zlinux-ssh-user: ${{ secrets.ZLINUX_SSH_USER }}
           zlinux-ssh-key: ${{ secrets.ZLINUX_SSH_KEY }}
           zlinux-ssh-passphrase: ${{ secrets.ZLINUX_SSH_PASSPHRASE }}
-          build-arg-list: ZOWE_BASE_IMAGE=latest-ubuntu
         timeout-minutes: 10
 
   define-ubuntu-manifest:
@@ -107,8 +104,6 @@ jobs:
           redhat-registry-password: ${{ secrets.REDHAT_DEVELOPER_PASSWORD }}
 
       - uses: zowe-actions/shared-actions/docker-build-local@main
-        with:
-          build-arg-list: ZOWE_BASE_IMAGE=latest-ubi
         timeout-minutes: 5
 
   build-ubi-s390x:
@@ -137,7 +132,6 @@ jobs:
           redhat-registry: ${{ env.DEFAULT_REDHAT_DOCKER_REGISTRY }}
           redhat-registry-user: ${{ secrets.REDHAT_DEVELOPER_USER }}
           redhat-registry-password: ${{ secrets.REDHAT_DEVELOPER_PASSWORD }}
-          build-arg-list: ZOWE_BASE_IMAGE=latest-ubi
         timeout-minutes: 10
 
   define-ubi-manifest:
