@@ -71,7 +71,7 @@ jobs:
       - name: '[Prep 5] Setup Node'
         uses: actions/setup-node@v2
         with:
-          node-version: 16.15.0
+          node-version: 22.12.0
 
       - name: '[Setup] NodeJS project setup'
         uses: zowe-actions/nodejs-actions/setup@main
