@@ -4,7 +4,7 @@
   "description": "Zowe Desktop plugin for IP Explorer utility",
   "license": "EPL-2.0",
   "dependencies": {
-    "@babel/runtime": "7.16.0",
+    "@babel/runtime": "7.27.0",
     "@material-ui/core": "4.12.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.60",
@@ -18,9 +18,9 @@
     "react-router": "4.3.1"
   },
   "scripts": {
-    "start": "webpack --progress --watch",
-    "build": "webpack --progress --mode production",
-    "dev-deploy": "webpack --progress && ../transfer.sh",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider webpack --progress --watch",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --progress --mode production",
+    "dev-deploy": "NODE_OPTIONS=--openssl-legacy-provider webpack --progress && ../transfer.sh",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
@@ -37,9 +37,9 @@
     "source-map-loader": "2.0.2",
     "ts-loader": "8.1.0",
     "tslint": "5.10.0",
-    "typescript": "4.2.4",
+    "typescript": "5.5.4",
     "url-loader": "4.1.1",
-    "webpack": "5.36.2",
+    "webpack": "5.99.5",
     "webpack-cli": "4.6.0"
   }
 }
