@@ -18,9 +18,9 @@
     "react-router": "4.3.1"
   },
   "scripts": {
-    "start": "webpack --progress --watch",
-    "build": "webpack --progress --mode production",
-    "dev-deploy": "webpack --progress && ../transfer.sh",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider webpack --progress --watch",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --progress --mode production",
+    "dev-deploy": "NODE_OPTIONS=--openssl-legacy-provider webpack --progress && ../transfer.sh",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
