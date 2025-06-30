@@ -14,6 +14,11 @@ license: EPL-2.0
 repository:
   type: git
   url: https://github.com/zowe/explorer-ip.git
+build:
+  branch: "{{build.branch}}"
+  number: "{{build.number}}"
+  commitHash: "{{build.commitHash}}"
+  timestamp: {{build.timestamp}}
 appfwPlugins:
   - path: .
 schemas:
