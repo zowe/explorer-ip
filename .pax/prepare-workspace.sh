@@ -98,7 +98,7 @@ cp -r webClient "${PAX_WORKSPACE_DIR}/content"
 
 # clone zss and copy to dataService (zss cannot be built on Unix)
 echo "[${SCRIPT_NAME}] clone zss and copy to dataService"
-git clone --recursive https://github.com/zowe/zss/   # this line also downloads zowe-common-c
+git clone --recursive https://github.com/zowe/zss/ -b v2.x/staging  # this line also downloads zowe-common-c
 rm -rf zss/.git*
 cp -r zss dataService/build
 
