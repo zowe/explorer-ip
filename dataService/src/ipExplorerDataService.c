@@ -77,10 +77,6 @@ uint64 loggingId;
 
 #define LOG_SANITIZE_BUFSIZE 256
 
-/* Returns a copy of `input` safe to embed in a single log line: control
-   characters (notably CR/LF, which could otherwise be used to inject
-   forged log lines) are stripped out. The returned pointer is only
-   valid until `buffer` is reused. */
 static const char *sanitizeForLog(const char *input, char *buffer, size_t bufferSize) {
   size_t i, j;
   if (input == NULL) {
