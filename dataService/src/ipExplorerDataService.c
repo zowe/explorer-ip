@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -84,7 +85,7 @@ static const char *sanitizeForLog(const char *input, char *buffer, size_t buffer
   }
   for (i = 0, j = 0; input[i] != '\0' && j + 1 < bufferSize; i++) {
     unsigned char c = (unsigned char)input[i];
-    if (c >= 0x20 && c != 0x7F) {
+    if (!iscntrl(c)) {
       buffer[j++] = (char)c;
     }
   }
