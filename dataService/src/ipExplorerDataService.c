@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -75,22 +76,40 @@
 
 uint64 loggingId;
 
+#define LOG_SANITIZE_BUFSIZE 256
+
+static const char *sanitizeForLog(const char *input, char *buffer, size_t bufferSize) {
+  size_t i, j;
+  if (input == NULL) {
+    return "(null)";
+  }
+  for (i = 0, j = 0; input[i] != '\0' && j + 1 < bufferSize; i++) {
+    unsigned char c = (unsigned char)input[i];
+    if (!iscntrl(c)) {
+      buffer[j++] = (char)c;
+    }
+  }
+  buffer[j] = '\0';
+  return buffer;
+}
+
 typedef struct NMIBufferType_tag{
   NWMHeader    header;
   NWMFilter    filters[MAX_NWM_FILTERS];  /* the filters exist in an OR of an AND of the properties in the NWMFilter Object */
 } NMIBufferType;
 
 void processApplDataFilter(NWMFilter *filter, HttpRequestParam *parm, int filterNumber) {
+  char logBuf[LOG_SANITIZE_BUFSIZE];
   zowelog(NULL, loggingId, ZOWE_LOG_DEBUG2,
           "Http request parameter: %s=%s for filter number %d\n",
-          parm->specification->name, parm->stringValue, filterNumber);
+          parm->specification->name, sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)), filterNumber);
 
   filter->NWMFilterFlags |= NWMFILTERAPPLDATAMASK;
   memset(filter->NWMFilterApplData, ' ', 40);
   if (strlen(parm->stringValue) > 40) {
     zowelog(NULL, loggingId, ZOWE_LOG_WARNING,
           "Http request parameter %s=%s will be truncated.\n",
-          parm->specification->name, parm->stringValue);
+          parm->specification->name, sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)));
     memcpy(filter->NWMFilterApplData, parm->stringValue, 40);
   }
   else {
@@ -110,10 +129,11 @@ void processAsidFilter(NWMFilter *filter, HttpRequestParam *parm, int filterNumb
 void processIpAddressFilter(NWMFilter *filter, HttpRequestParam *parm, int filterNumber, bool local) {
   int rc;
   struct addrinfo hint, *res = NULL;
+  char logBuf[LOG_SANITIZE_BUFSIZE];
 
   zowelog(NULL, loggingId, ZOWE_LOG_DEBUG2,
           "Http request parameter: %s=%s for filter number %d\n",
-          parm->specification->name, parm->stringValue, filterNumber);
+          parm->specification->name, sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)), filterNumber);
 
   memset(&hint, 0, sizeof hint);
   hint.ai_family = PF_UNSPEC;
@@ -123,7 +143,7 @@ void processIpAddressFilter(NWMFilter *filter, HttpRequestParam *parm, int filte
   if (rc) {
     zowelog(NULL, loggingId, ZOWE_LOG_WARNING,
           "Http request parameter error for %s=%s: getaddrinfo() failed with error: %s\n",
-          parm->specification->name, parm->stringValue, gai_strerror(rc));
+          parm->specification->name, sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)), gai_strerror(rc));
     zowelog(NULL, loggingId, ZOWE_LOG_WARNING, "Filter criterion will not be applied.\n");
     return ;
   }
@@ -182,16 +202,17 @@ void processResourceIdFilter(NWMFilter *filter, HttpRequestParam *parm, int filt
 }
 
 void processResourceNameFilter(NWMFilter *filter, HttpRequestParam *parm, int filterNumber) {
+  char logBuf[LOG_SANITIZE_BUFSIZE];
   zowelog(NULL, loggingId, ZOWE_LOG_DEBUG2,
           "Http request parameter: %s=%s for filter number %d\n",
-          parm->specification->name, parm->stringValue, filterNumber);
+          parm->specification->name, sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)), filterNumber);
 
   filter->NWMFilterFlags |= NWMFILTERRESNAMEMASK;
   memset(filter->NWMFilterResourceName, ' ', 8);
   if (strlen(parm->stringValue) > 8) {
     zowelog(NULL, loggingId, ZOWE_LOG_WARNING,
           "Http request parameter %s=%s will be truncated.\n",
-          parm->specification->name, parm->stringValue);
+          parm->specification->name, sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)));
     memcpy(filter->NWMFilterResourceName, parm->stringValue, 8);
   }
   else {
@@ -312,8 +333,9 @@ char *getRsvNameFilter(HttpRequestParam *firstParm) {
   HttpRequestParam *parm;
   for (parm = firstParm; parm != NULL; parm = parm->next) {
     if (strcmp(FPORTRSVNAME, parm->specification->name) == 0) {
+      char logBuf[LOG_SANITIZE_BUFSIZE];
       zowelog(NULL, loggingId, ZOWE_LOG_DEBUG2,
-          "Port reserved name filter is set to %s.\n", parm->stringValue);
+          "Port reserved name filter is set to %s.\n", sanitizeForLog(parm->stringValue, logBuf, sizeof(logBuf)));
       return parm->stringValue;
     }
   }
@@ -1025,11 +1047,12 @@ static int serveMappingService(HttpService *service, HttpResponse *response) {
 
   char *requestType = stringListPrint(request->parsedFile, service->parsedMaskPartCount + 1, 1, "/", 0);  // extract NWM request type from the HTTP request
 
+  char logBuf[LOG_SANITIZE_BUFSIZE];
   zowelog(NULL, loggingId, ZOWE_LOG_DEBUG,
-          "Selected TCPIP stack is %s\n", tcpip);
+          "Selected TCPIP stack is %s\n", sanitizeForLog(tcpip, logBuf, sizeof(logBuf)));
 
   zowelog(NULL, loggingId, ZOWE_LOG_DEBUG,
-          "The request type is: %s\n", requestType);
+          "The request type is: %s\n", sanitizeForLog(requestType, logBuf, sizeof(logBuf)));
 
   // Validate tcpip parameter
   if (strlen(tcpip) > 8) {
