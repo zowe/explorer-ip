@@ -9,16 +9,18 @@
 */
 
 const axios = require('axios');
+const https = require('https');
 const expect = require('chai').expect;
 const assert = require('chai').assert
 
 const zssHost = process.env.ZSS_HOST || "localhost";
 const zssPort = process.env.ZSS_PORT || 8542;
+const zssProtocol = process.env.ZSS_PROTOCOL || "https";
 const tcpip = process.env.TCIP_SERVICE_NAME || "tcpip";
 const userid = process.env.ZOWE_USERNAME || "user";
 const password = process.env.ZOWE_PASSWORD || "password";
 const agentIP = '127.0.0.1';
-const rootURL = `http://${zssHost}:${zssPort}/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/`;
+const rootURL = `${zssProtocol}://${zssHost}:${zssPort}/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/`;
 
 describe('Test explorer-ip', function () {
 
@@ -28,7 +30,12 @@ describe('Test explorer-ip', function () {
     auth: {
       username: userid,
       password: password
-    }
+    },
+    // Allows testing against a ZSS instance with a self-signed certificate.
+    // Never disable certificate validation against a non-test endpoint.
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: process.env.ZSS_ALLOW_SELF_SIGNED !== 'true'
+    })
   });
 
   describe('Verify info endpoint', function () {
