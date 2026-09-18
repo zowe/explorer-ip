@@ -1098,7 +1098,7 @@ void ipExplorerDataServiceInstaller(DataService *dataService, HttpServer *server
   httpService->authType = SERVICE_AUTH_NATIVE_WITH_SESSION_TOKEN;
   httpService->serviceFunction = serveMappingService;
   httpService->runInSubtask = TRUE;
-  httpService->doImpersonation = FALSE;
+  httpService->doImpersonation = TRUE;
 
   // Maximum number of filters for NMI (NWM) service is 4 filters.
   httpService->paramSpecList =  makeStringParamSpec(FPORTRSVNAME, SERVICE_ARG_OPTIONAL, \
