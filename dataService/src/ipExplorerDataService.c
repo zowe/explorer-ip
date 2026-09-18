@@ -842,7 +842,7 @@ int processAndRespondPorts(HttpResponse *response, CrossMemoryServerName *privil
   int portMaxFilter = getPortMaxFilter(response->request->processedParamList);
   char *portRsvName = getRsvNameFilter(response->request->processedParamList);
 
-  if (strlen(portRsvName) > 8) {
+  if (portRsvName != NULL && strlen(portRsvName) > 8) {
     safeFree((char *)respBuffer, rbl);
     respondWithJsonError(response, FPORTRSVNAME " parameter exceeded the allowable length (8 chars).", 500,
                                    "Internal Server Error");
