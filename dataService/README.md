@@ -104,6 +104,23 @@ If the `fPortMax` filter is used and set to a number in <1, 65535> interval then
 
 The `fPortRsvName` filter is to be set to a string that has up to 8 characters. The filter is matched with the `jobname` and `safname` attributes of a result object. The filter string can contain `*` (represents zero or more characters) and `?` (represents exactly one character) wildcards.
 
+# Running the integration tests
+The tests in `dataService/test` send requests to a running ZSS instance that has the data service installed. From the `dataService/test` directory, run `npm install` and then `npm test`.
+
+The tests are configured through environment variables:
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ZOWE_USERNAME` | Yes | none | z/OS user ID used to authenticate to ZSS. |
+| `ZOWE_PASSWORD` | Yes | none | Password for that user ID. |
+| `ZSS_HOST` | No | `localhost` | Host name of the ZSS instance. |
+| `ZSS_PORT` | No | `8542` | Port of the ZSS instance. |
+| `ZSS_PROTOCOL` | No | `https` | Protocol used to reach ZSS. |
+| `TCIP_SERVICE_NAME` | No | `tcpip` | Name of the TCP/IP stack to query. |
+| `ZSS_ALLOW_SELF_SIGNED` | No | unset | Set to `true` to accept a self-signed ZSS certificate. Use only against a test instance. |
+
+The test run stops immediately if `ZOWE_USERNAME` or `ZOWE_PASSWORD` is not set.
+
 # Troubleshooting
 To turn on logging, add the following snippet into your zluxserver.json file:
 
