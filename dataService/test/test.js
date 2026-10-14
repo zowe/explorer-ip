@@ -17,8 +17,17 @@ const zssHost = process.env.ZSS_HOST || "localhost";
 const zssPort = process.env.ZSS_PORT || 8542;
 const zssProtocol = process.env.ZSS_PROTOCOL || "https";
 const tcpip = process.env.TCIP_SERVICE_NAME || "tcpip";
-const userid = process.env.ZOWE_USERNAME || "user";
-const password = process.env.ZOWE_PASSWORD || "password";
+
+// Credentials must come from the environment; no defaults are provided.
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} must be set to run the explorer-ip integration tests.`);
+  }
+  return value;
+}
+const userid = requireEnv('ZOWE_USERNAME');
+const password = requireEnv('ZOWE_PASSWORD');
 const agentIP = '127.0.0.1';
 const rootURL = `${zssProtocol}://${zssHost}:${zssPort}/ZLUX/plugins/org.zowe.explorer-ip/services/ipExplorer/`;
 
