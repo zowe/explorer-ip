@@ -1179,8 +1179,8 @@ static int serveMappingService(HttpService *service, HttpResponse *response) {
     respondWithJsonError(response, "Tcpip name is invalid", 400, "Bad Request");
     return 0;
   }
-  // Upcase in place: the handlers and the authorization profile name below
-  // both rely on tcpip already being upper case.
+  // Upcase in place so the authorization profile name below is built from the
+  // upper case stack name. The handlers upcase it again, which is harmless.
   strupcase(tcpip);
 
   // Reject bad methods and unknown endpoints before any authorization work
