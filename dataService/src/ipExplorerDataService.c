@@ -536,7 +536,7 @@ int processAndRespondConnections(HttpResponse *response, CrossMemoryServerName *
 
   respBuffer = buildAndExecuteNWMService(&rbl,
                                         privilegedServerName,
-                                        tcpip,
+                                        strupcase(tcpip),
                                         NWMTCPCONNTYPE,
                                         response->request->processedParamList);
   if (respBuffer == NULL) {
@@ -615,7 +615,7 @@ int processAndRespondListeners(HttpResponse *response, CrossMemoryServerName *pr
 
   respBuffer = buildAndExecuteNWMService(&rbl,
                                         privilegedServerName,
-                                        tcpip,
+                                        strupcase(tcpip),
                                         NWMTCPLISTENTYPE,
                                         response->request->processedParamList);
   if (respBuffer == NULL) {
@@ -761,7 +761,7 @@ int processAndRespondInfo(HttpResponse *response, CrossMemoryServerName *privile
 
   respBufProf = buildAndExecuteNWMService(&rblp,
                                         privilegedServerName,
-                                        tcpip,
+                                        strupcase(tcpip),
                                         NWMPROFILETYPE,
                                         NULL);
 
@@ -771,7 +771,7 @@ int processAndRespondInfo(HttpResponse *response, CrossMemoryServerName *privile
   }
   respBufIf = buildAndExecuteNWMService(&rbli,
                                         privilegedServerName,
-                                        tcpip,
+                                        strupcase(tcpip),
                                         NWMIFSTYPE,
                                         NULL);
   if (respBufIf == NULL) {
@@ -832,7 +832,7 @@ int processAndRespondPorts(HttpResponse *response, CrossMemoryServerName *privil
 
   respBuffer = buildAndExecuteNWMService(&rbl,
                                         privilegedServerName,
-                                        tcpip,
+                                        strupcase(tcpip),
                                         NWMPROFILETYPE,
                                         NULL);
   if (respBuffer == NULL) {
