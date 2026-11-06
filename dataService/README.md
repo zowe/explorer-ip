@@ -41,6 +41,40 @@ The data service supports following endpoints:
     3. `listeners` - returns a list of TCP listeners
     4. `ports` - returns a list of reserverd ports
 
+## Authorization
+The `<tcpipname>/<function>` endpoints call the z/OS Network Management Interface (NMI) with the authority of the ZIS server, so the data service can check the requesting user itself. The check is opt-in per TCP/IP stack. Once the following profile is defined in the ZIS user class (`ZOWE` unless `ZWES.AUTH.CLASS` is set to something else in the ZIS parmlib), only users with **READ** access to it can query that stack:
+
+```
+IPEXPLORER.NMI.<sysname>.<tcpipname>
+```
+
+If no profile covers the stack, every authenticated user can query it.
+
+ZIS only evaluates profiles in that one class, so the `SERVAUTH` profiles that protect the NMI itself cannot be checked here. This profile is separate from them and must be kept in step with them by your security administrator.
+
+For example, to allow user `JDOE` to query stack `TCPIP` on system `SYS1`:
+```
+RDEFINE ZOWE IPEXPLORER.NMI.SYS1.TCPIP UACC(NONE)
+PERMIT IPEXPLORER.NMI.SYS1.TCPIP CLASS(ZOWE) ID(JDOE) ACCESS(READ)
+SETROPTS RACLIST(ZOWE) REFRESH
+```
+Responses when the check does not pass:
+
+| Status | Cause |
+|--------|-------|
+| 401 | The request is not authenticated |
+| 403 | The profile is defined and the user lacks READ |
+| 500 | The check could not be performed: the ZIS server is unavailable, or ZIS could not create a security environment (ACEE) for the user, for example because the user ID is revoked or unknown to the security product |
+
+Details of every denied or failed check, including the SAF return codes, are written to the zssServer log.
+
+`gettcpipname` is not affected.
+
+### Upgrading
+Upgrading changes nothing until you define a profile: stacks without one stay open to all authenticated users. To restrict a stack, define its profile and grant READ to the users who need it, as in the example above.
+
+An undefined profile is also what SAF reports when the ZIS user class is not active or not RACLISTed, in which case nothing is protected. The data service logs each such request at INFO level in the zssServer log, so check the class is active if a profile you defined seems to have no effect.
+
 # Filtering
 Filters are supported for `connections`, `listeners` and `ports` endpoints of the explorer-ip data service. Filters are passed to the data service as HTTP GET request parameters, e.g. <code>ht<span>tp://</span>example.com<b>?filter1=foo&filter2=bar</b></code> where two parameters are specified, the `filter1` parameter with the `foo` value and the `filter2` parameter with the `bar` value.
 
