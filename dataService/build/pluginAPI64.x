@@ -137,6 +137,8 @@
  IMPORT CODE64,'zssServer64','logGetLevel'                                     
  IMPORT CODE64,'zssServer64','dumpbuffer'                                      
  IMPORT CODE64,'zssServer64','zisCallNWMService'                               
+ IMPORT CODE64,'zssServer64','zisCheckEntity'                                  
+ IMPORT CODE64,'zssServer64','getSystemName'                                   
  IMPORT CODE64,'zssServer64','getConfiguredProperty'                           
  IMPORT CODE64,'zssServer64','strupcase'                                       
  IMPORT CODE64,'zssServer64','makeGeneratedService'                            
