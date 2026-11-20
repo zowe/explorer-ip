@@ -25,7 +25,7 @@ jobs:
     steps:
       # this action will fail the whole workflow if permission check fails
       - name: check permission
-        uses: zowe-actions/shared-actions/permission-check@main
+        uses: zowe-actions/shared-actions/permission-check@77d7d9b50e60fedc8132b5e5eb6d611c4e483416 # main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,20 +36,20 @@ jobs:
 #    needs: check-permission
 #    runs-on: ubuntu-latest
 #    steps:
-#      - uses: actions/checkout@v2
+#      - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
 #
 #      - name: Validate package.json
-#        uses: zowe-actions/shared-actions/validate-package-json@main
+#        uses: zowe-actions/shared-actions/validate-package-json@77d7d9b50e60fedc8132b5e5eb6d611c4e483416 # main
 
   build-test:
     runs-on: ubuntu-latest
 #    needs: validate-package-json
     steps: 
       - name: '[Prep 1] Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
 
       - name: '[Prep 2] Cache node modules'
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           path: |
@@ -61,26 +61,26 @@ jobs:
             ${{ runner.os }}-build-cache-node-modules-
 
       - name: '[Prep 3] Setup jFrog CLI'
-        uses: jfrog/setup-jfrog-cli@v2
+        uses: jfrog/setup-jfrog-cli@11ee3f9bb82595485cb55670e4f93885080e183b # v2
         env:
           JF_ENV_1: ${{ secrets.JF_ARTIFACTORY_TOKEN }}
           
       - name: '[Prep 4] Prepare workflow'
-        uses: zowe-actions/shared-actions/prepare-workflow@main
+        uses: zowe-actions/shared-actions/prepare-workflow@77d7d9b50e60fedc8132b5e5eb6d611c4e483416 # main
 
       - name: '[Prep 5] Setup Node'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2
         with:
           node-version: 22.12.0
 
       - name: '[Setup] NodeJS project setup'
-        uses: zowe-actions/nodejs-actions/setup@main
+        uses: zowe-actions/nodejs-actions/setup@51d0830982b1ef6c0168fe0c288ed6b69bc892c1 # main
         with:
           package-name: 'org.zowe.explorer-ip'
           working-directory: 'webClient'
 
       - name: '[Packaging] Make pax'
-        uses: zowe-actions/shared-actions/make-pax@main
+        uses: zowe-actions/shared-actions/make-pax@77d7d9b50e60fedc8132b5e5eb6d611c4e483416 # main
         with:
           pax-name: 'explorer-ip'
           pax-options: '-x os390 -pp'
@@ -89,7 +89,7 @@ jobs:
           extra-files: 'explorer-ip.tar'
 
       - name: '[Publish] Publish'
-        uses: zowe-actions/shared-actions/publish@main
+        uses: zowe-actions/shared-actions/publish@77d7d9b50e60fedc8132b5e5eb6d611c4e483416 # main
         if: success()
         with:
           artifacts: |
@@ -99,11 +99,11 @@ jobs:
 
       - name: '[Release 1] Release (if necessary)'
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
-        uses: zowe-actions/shared-actions/release@main
+        uses: zowe-actions/shared-actions/release@77d7d9b50e60fedc8132b5e5eb6d611c4e483416 # main
 
       - name: '[Release 2] NPM bump version (if necessary)' 
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' && env.IS_FORMAL_RELEASE_BRANCH == 'true' && env.PRE_RELEASE_STRING == ''}}
-        uses: zowe-actions/nodejs-actions/bump-version@main
+        uses: zowe-actions/nodejs-actions/bump-version@51d0830982b1ef6c0168fe0c288ed6b69bc892c1 # main
         with:
           npm-package-directory: 'webClient'
         env: 
