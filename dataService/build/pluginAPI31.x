@@ -137,6 +137,8 @@
  IMPORT CODE,'zssServer','logGetLevel'                                         
  IMPORT CODE,'zssServer','dumpbuffer'                                          
  IMPORT CODE,'zssServer','zisCallNWMService'                                   
+ IMPORT CODE,'zssServer','zisCheckEntity'                                      
+ IMPORT CODE,'zssServer','getSystemName'                                       
  IMPORT CODE,'zssServer','getConfiguredProperty'                               
  IMPORT CODE,'zssServer','strupcase'                                           
  IMPORT CODE,'zssServer','makeGeneratedService'                                

@@ -74,6 +74,15 @@
     makeIntParamSpec(FFIELDNAME(FSERVRESOURCEID,s), SERVICE_ARG_OPTIONAL, 0, 0, 0, 0, n \
    )))))))))))
 
+/* Profile guarding the real-time NMI: IPEXPLORER.NMI.<sysname>.<tcpname>
+   ZIS only evaluates profiles in its own configured user class (ZOWE unless
+   ZWES.AUTH.CLASS says otherwise) and rejects any other class, so SERVAUTH
+   cannot be checked through it. An empty class name selects that default. */
+#define NMI_AUTH_CLASS        ""
+#define NMI_AUTH_PREFIX       "IPEXPLORER.NMI"
+#define NMI_PROFILE_SIZE      64
+#define NMI_SAF_RC_NO_PROFILE 4   /* SAF RC: no profile covers the resource */
+
 uint64 loggingId;
 
 #define LOG_SANITIZE_BUFSIZE 256
@@ -1033,11 +1042,118 @@ int getTcpipName(HttpResponse *response) {
   }
 }
 
+/* A TCPIP stack name or system name is made of alphanumeric or national
+   characters. Anything else must not be placed in a SAF profile name. The
+   set is spelled out rather than taken from isalnum(), whose result depends
+   on the locale. The caller is responsible for the length limit. */
+#define NAME_QUALIFIER_CHARS \
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$"
+
+static bool isValidNameQualifier(const char *name) {
+  if (name[0] == '\0') {
+    return false;
+  }
+  for (size_t i = 0; name[i] != '\0'; i++) {
+    if (strchr(NAME_QUALIFIER_CHARS, name[i]) == NULL) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/* getSystemName returns a blank-padded 8 character name. Copy it into buf
+   (at least 9 bytes) without the padding. */
+static void getTrimmedSystemName(char *buf) {
+  memcpy(buf, getSystemName(), 8);
+  buf[8] = '\0';
+  for (int i = 7; i >= 0 && buf[i] == ' '; i--) {
+    buf[i] = '\0';
+  }
+}
+
+/* Verify the requesting user has READ access to the IPEXPLORER.NMI profile
+   for this TCPIP stack, in the ZIS user class. The protection is opt-in per
+   stack: if no profile is defined, the user is permitted. If a profile is
+   defined and the user lacks READ, or the check cannot be performed, access
+   is refused.
+   Returns true if permitted. Otherwise the response has been sent. */
+static bool checkNWMAccess(HttpResponse *response,
+                           CrossMemoryServerName *privilegedServerName,
+                           const char *tcpip) {
+  HttpRequest *request = response->request;
+
+  char sysname[9];
+  getTrimmedSystemName(sysname);
+
+  char profile[NMI_PROFILE_SIZE];
+  int n = isValidNameQualifier(sysname) ?
+          snprintf(profile, sizeof(profile), "%s.%s.%s",
+                   NMI_AUTH_PREFIX, sysname, tcpip) : -1;
+  if (n < 0 || n >= (int)sizeof(profile)) {
+    zowelog(NULL, loggingId, ZOWE_LOG_SEVERE,
+            "Unable to build NMI authorization profile name\n");
+    respondWithJsonError(response, "Internal Server Error", 500, "Internal Server Error");
+    return false;
+  }
+
+  ZISAuthServiceStatus status = {0};
+  int rc = zisCheckEntity(privilegedServerName, request->username,
+                          NMI_AUTH_CLASS, profile, SAF_AUTH_ATTR_READ, &status);
+  if (rc == RC_ZIS_SRVC_OK) {
+    return true;
+  }
+
+  /* SAF_ERROR means SAF ran and did not permit. SAF RC 8 is an explicit
+     denial. SAF RC 4 means no profile covers the resource: the stack is not
+     protected, so authenticated users are let through. Anything else means
+     the question could not be asked, and then safStatus must not be read:
+     the status union may hold abend info. */
+  if (rc == RC_ZIS_SRVC_SERVICE_FAILED &&
+      status.baseStatus.serviceRC == RC_ZIS_AUTHSRV_SAF_ERROR) {
+    char userBuf[LOG_SANITIZE_BUFSIZE], profBuf[LOG_SANITIZE_BUFSIZE];
+    if (status.safStatus.safRC == NMI_SAF_RC_NO_PROFILE) {
+      /* Also the result if the class is not active or not RACLISTed, in which
+         case nothing is protected, so leave a trace for the administrator. */
+      zowelog(NULL, loggingId, ZOWE_LOG_INFO,
+              "NWM access allowed for %s, no profile '%s' covers the stack "
+              "(or class not active), RACF RC %d, RACF RSN %d\n",
+              sanitizeForLog(request->username, userBuf, sizeof(userBuf)),
+              sanitizeForLog(profile, profBuf, sizeof(profBuf)),
+              status.safStatus.racfRC, status.safStatus.racfRSN);
+      return true;
+    }
+    zowelog(NULL, loggingId, ZOWE_LOG_WARNING,
+            "NWM access denied for %s, profile '%s', SAF RC %d, RACF RC %d, RACF RSN %d\n",
+            sanitizeForLog(request->username, userBuf, sizeof(userBuf)),
+            sanitizeForLog(profile, profBuf, sizeof(profBuf)),
+            status.safStatus.safRC, status.safStatus.racfRC, status.safStatus.racfRSN);
+    respondWithJsonError(response, "Forbidden - insufficient authorization", 403, "Forbidden");
+  } else {
+    zowelog(NULL, loggingId, ZOWE_LOG_WARNING,
+            "NWM authorization check could not be performed, zisCheckEntity RC %d, ZIS service RC %d\n",
+            rc, status.baseStatus.serviceRC);
+    respondWithJsonError(response, "Authorization check failed", 500, "Internal Server Error");
+  }
+  return false;
+}
+
+typedef int (*NMIRequestHandler)(HttpResponse *response,
+                                 CrossMemoryServerName *privilegedServerName,
+                                 char *tcpip);
+
 /* High-level function to serve HTTP requests */
 static int serveMappingService(HttpService *service, HttpResponse *response) {
   CrossMemoryServerName *privilegedServerName;
 
   HttpRequest *request = response->request;
+
+  // Refuse unauthenticated callers before revealing anything about valid
+  // stack names or endpoints.
+  if (!request->authenticated || request->username == NULL) {
+    respondWithJsonError(response, "Not Authorized", 401, "Unauthorized");
+    return 0;
+  }
+
   // either extract TCPIP name from the HTTP request or extract "gettcpipname" keyword
   char *tcpip = stringListPrint(request->parsedFile, service->parsedMaskPartCount, 1, "/", 0);
   if (strcasecmp("gettcpipname", tcpip) == 0) {
@@ -1059,36 +1175,49 @@ static int serveMappingService(HttpService *service, HttpResponse *response) {
     respondWithJsonError(response, "Tcpip name is too long", 400, "Bad Request");
     return 0;
   }
+  if (!isValidNameQualifier(tcpip)) {
+    respondWithJsonError(response, "Tcpip name is invalid", 400, "Bad Request");
+    return 0;
+  }
+  // Upcase in place so the authorization profile name below is built from the
+  // upper case stack name. The handlers upcase it again, which is harmless.
+  strupcase(tcpip);
+
+  // Reject bad methods and unknown endpoints before any authorization work
+  if (strcasecmp(request->method, methodGET) != 0) {
+    respondMethodNotAllowed(response);
+    return 0;
+  }
+
+  NMIRequestHandler handler = NULL;
+  if (strcasecmp("connections", requestType) == 0) {
+    handler = processAndRespondConnections;
+  }
+  else if (strcasecmp("ports", requestType) == 0) {
+    handler = processAndRespondPorts;
+  }
+  else if (strcasecmp("listeners", requestType) == 0) {
+    handler = processAndRespondListeners;
+  }
+  else if (strcasecmp("info", requestType) == 0) {
+    handler = processAndRespondInfo;
+  }
+  else {
+    respondWithJsonError(response, "Endpoint not found.", 404, "Not Found");
+    return 0;
+  }
+
   // Get Zis server name
   privilegedServerName = getConfiguredProperty(service->server,
       HTTP_SERVER_PRIVILEGED_SERVER_PROPERTY);
 
-  // Handle HTTP methods
-  if (strcasecmp(request->method, methodGET) == 0) {
-    // Process "connections" request type
-    if (strcasecmp("connections", requestType) == 0) {
-      processAndRespondConnections(response, privilegedServerName, strupcase(tcpip));
-    }
-    // Process "connections" request type
-    else if (strcasecmp("ports", requestType) == 0) {
-      processAndRespondPorts(response, privilegedServerName, strupcase(tcpip));
-    }
-    // Process "listeners" request type
-    else if (strcasecmp("listeners", requestType) == 0) {
-      processAndRespondListeners(response, privilegedServerName, strupcase(tcpip));
-    }
-    // Process "info" request type
-    else if (strcasecmp("info", requestType) == 0) {
-      processAndRespondInfo(response, privilegedServerName, strupcase(tcpip));
-    }
-    else {
-      respondWithJsonError(response, "Endpoint not found.", 404, "Not Found");
-      return 0;
-    }
+  // The NMI is called with the server's authority, so check the user's own
+  // access to it before serving the request.
+  if (!checkNWMAccess(response, privilegedServerName, tcpip)) {
+    return 0;
   }
-  else {
-    respondMethodNotAllowed(response);
-  }
+
+  handler(response, privilegedServerName, tcpip);
   return 0;
 }
 
